@@ -1,10 +1,9 @@
 public class Gertrude {
     public static void main(String[] args) {
-        String logo = "  ____                     _           _      _      \n"
-                + " / ___| ___  ___ _ __   __| | ___  ___| |_ __| | ___ \n"
-                + "| |  _ / _ \\/ _ \\ '_ \\ / _` |/ _ \\/ __| __/ _` |/ _ \\\n"
-                + "| |_| |  __/  __/ | | | (_| |  __/\\__ \\ || (_| |  __/\n"
-                + " \\____|\\___|\\___|_| |_|\\__,_|\\___||___/\\__\\__,_|\\___|\n";
-        System.out.println("Hello from\n" + logo);
+        System.out.println("\nWelcome, dear! I'm Gertrude, your friendly AI chatbot.\n"
+                + "-------------------------------------------------------------------------\n"
+                + "If you need help, advice, or just a little chat, I'm always here for you.\n"
+                + "Now, what can I do for you today, sweetheart?\n"
+                + "-------------------------------------------------------------------------\n");
     }
 }
