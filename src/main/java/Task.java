@@ -18,6 +18,8 @@ public abstract class Task {
         return String.format("[%s] ", getTaskType());
     }
 
+    public abstract String format(int index);
+
     @Override
     public String toString() {
         return getTitlePrefix() + title;
