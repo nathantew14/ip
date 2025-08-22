@@ -1,28 +1,32 @@
-public class Event extends CompletableTask {
-    private String start;
-    private String end;
 
-    public Event(String title, String start, String end) {
-        super(title);
-        this.start = start;
-        this.end = end;
+// Event.java
+/**
+ * Represents an event task with start and end date/time.
+ */
+public class Event extends Task {
+    protected String from;
+    protected String to;
+
+    /**
+     * Constructs an Event with the given description, start and end date/time.
+     *
+     * @param description The description of the event.
+     * @param from The start date/time.
+     * @param to The end date/time.
+     */
+    public Event(String description, String from, String to) {
+        super(description);
+        this.from = from;
+        this.to = to;
     }
 
-    public String getStart() {
-        return start;
-    }
-
-    public String getEnd() {
-        return end;
-    }
-
-    @Override
-    public String getTaskType() {
-        return "E";
-    }
-
+    /**
+     * Returns the string representation of the event.
+     *
+     * @return The string representation.
+     */
     @Override
     public String toString() {
-        return super.toString() + " (from: " + start + " to: " + end + ")";
+        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
     }
 }
