@@ -3,8 +3,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Gertrude {
-    private static final String ADD_TODO_PREFIX = "add todo:";
-    private static final String LIST_TODOS_COMMAND = "list todos";
+    private static final String ADD_TODO_PREFIX = "todo:";
+    private static final String LIST_TODOS_COMMAND = "list";
+    private static final String COMPLETE_TODO_PREFIX = "mark:";
+    private static final String UNCOMPLETE_TODO_PREFIX = "unmark:";
     private static List<Todo> todos = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -45,9 +47,44 @@ public class Gertrude {
             }
             StringBuilder sb = new StringBuilder("Here are your todos:\n");
             for (int i = 0; i < todos.size(); i++) {
-                sb.append((i + 1) + ". " + todos.get(i).getTitle() + "\n");
+                sb.append(todos.get(i).format(i) + "\n");
             }
             return sb.toString().trim();
+        }
+
+        if (input.toLowerCase().startsWith(COMPLETE_TODO_PREFIX)) {
+            String idxStr = input.substring(COMPLETE_TODO_PREFIX.length()).trim();
+            try {
+                int idx = Integer.parseInt(idxStr) - 1;
+                if (idx >= 0 && idx < todos.size()) {
+                    todos.get(idx).setCompleted();
+                    return "Marked todo #" + (idx + 1) + " as completed.";
+                } else {
+                    return "Invalid todo index, dear!";
+                }
+            } catch (NumberFormatException e) {
+                return "Please provide a valid todo index to complete.";
+            }
+        }
+
+        if (input.toLowerCase().startsWith(UNCOMPLETE_TODO_PREFIX)) {
+            String idxStr = input.substring(UNCOMPLETE_TODO_PREFIX.length()).trim();
+            try {
+                int idx = Integer.parseInt(idxStr) - 1;
+                if (idx >= 0 && idx < todos.size()) {
+                    Todo todo = todos.get(idx);
+                    if (todo.isCompleted()) {
+                        todo.setNotCompleted();
+                        return "Marked todo #" + (idx + 1) + " as not completed.";
+                    } else {
+                        return "Todo #" + (idx + 1) + " is already not completed.";
+                    }
+                } else {
+                    return "Invalid todo index, dear!";
+                }
+            } catch (NumberFormatException e) {
+                return "Please provide a valid todo index to uncomplete.";
+            }
         }
 
         return input;
