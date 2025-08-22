@@ -24,3 +24,6 @@ Used AI to generate the exception class and use it throughout Gertrude.
 
 # Level-6
 Hit monthly chat messages quota on the integrated VSCode Copilot :(
+
+# A-Enums
+Used Deepseek to refactor my code to use Enums in place of the command prefixes and task tags (`/by`, `/start` and `/end`), as well as to use switch-case instead. The test ensures the refactor didn't break anything.
