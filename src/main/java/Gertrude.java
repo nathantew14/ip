@@ -1,6 +1,11 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Gertrude {
+    private static final String ADD_TODO_PREFIX = "add todo:";
+    private static List<Todo> todos = new ArrayList<>();
+
     public static void main(String[] args) {
         System.out.println("\nWelcome, dear! I'm Gertrude, your friendly AI chatbot.\n"
                 + "-------------------------------------------------------------------------\n"
@@ -22,6 +27,17 @@ public class Gertrude {
     }
 
     private static String getResponse(String input) {
+        if (input.toLowerCase().startsWith(ADD_TODO_PREFIX)) {
+            String title = input.substring(ADD_TODO_PREFIX.length()).trim();
+            if (!title.isEmpty()) {
+                Todo todo = new Todo(title);
+                todos.add(todo);
+                return "Added new todo: " + todo.getTitle();
+            } else {
+                return "Please provide a title for the todo.";
+            }
+        }
+        
         return input;
     }
 }
