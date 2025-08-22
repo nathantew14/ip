@@ -19,3 +19,5 @@ AI was over-eager in writing an extremely detailed logic flow to detect invalid 
 # A-TextUiTesting
 AI was unable to tell me to use chmod to allow me to run my `runtest.sh`
 
+# Level-5
+Used AI to generate the exception class and use it throughout Gertrude.

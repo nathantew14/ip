@@ -25,14 +25,21 @@ public class Gertrude {
             System.out.print("\nYou: ");
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase("bye")) break;
-            System.out.println("Gertrude: " + getResponse(input));
+            String response = "";
+            try {
+                response = getResponse(input);
+            } catch (InvalidInputException e) {
+                response = e.getMessage();
+            } finally {
+                System.out.println("Gertrude: " + response);
+            }
         }
 
         System.out.println("Gertrude: Goodbye, dear! Take care and come back anytime you need me.");
         scanner.close();
     }
 
-    private static String getResponse(String input) {
+    private static String getResponse(String input) throws InvalidInputException {
         if (input.toLowerCase().startsWith(ADD_TODO_PREFIX)) {
             String content = input.substring(ADD_TODO_PREFIX.length()).trim();
             if (!content.isEmpty()) {
@@ -44,7 +51,7 @@ public class Gertrude {
                 if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) ||
                     (startIndex != -1 && endIndex == -1) ||
                     (endIndex != -1 && startIndex == -1)) {
-                    return "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.";
+                    throw new InvalidInputException("Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
                 }
 
                 if (byIndex != -1) {
@@ -55,7 +62,7 @@ public class Gertrude {
                         tasks.add(dl);
                         return "Added new deadline: " + dl.getTitle() + " (by: " + dl.getDeadline() + ")";
                     } else {
-                        return "Please provide both a title and a deadline.";
+                        throw new InvalidInputException("Please provide both a title and a deadline.");
                     }
                 } else if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
                     String title = content.substring(0, startIndex).trim();
@@ -66,17 +73,17 @@ public class Gertrude {
                         tasks.add(event);
                         return "Added new event: " + event.getTitle() + " (from: " + event.getStart() + " to: " + event.getEnd() + ")";
                     } else {
-                        return "Please provide a title, start, and end for the event.";
+                        throw new InvalidInputException("Please provide a title, start, and end for the event.");
                     }
                 } else if (startIndex == -1 && endIndex == -1) {
                     Todo todo = new Todo(content);
                     tasks.add(todo);
                     return "Added new todo: " + todo.getTitle();
                 } else {
-                    return "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.";
+                    throw new InvalidInputException("Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
                 }
             } else {
-                return "Please provide a title for the todo.";
+                throw new InvalidInputException("Please provide a title for the todo.");
             }
         }
 
@@ -101,13 +108,13 @@ public class Gertrude {
                         ((CompletableTask)t).setCompleted();
                         return "Marked task #" + (idx + 1) + " as completed.";
                     } else {
-                        return "Task #" + (idx + 1) + " cannot be marked as completed.";
+                        throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as completed.");
                     }
                 } else {
-                    return "Invalid task index, dear!";
+                    throw new InvalidInputException("Invalid task index, dear!");
                 }
             } catch (NumberFormatException e) {
-                return "Please provide a valid task index to complete.";
+                throw new InvalidInputException("Please provide a valid task index to complete.");
             }
         }
 
@@ -123,16 +130,16 @@ public class Gertrude {
                             ct.setNotCompleted();
                             return "Marked task #" + (idx + 1) + " as not completed.";
                         } else {
-                            return "Task #" + (idx + 1) + " is already not completed.";
+                            throw new InvalidInputException("Task #" + (idx + 1) + " is already not completed.");
                         }
                     } else {
-                        return "Task #" + (idx + 1) + " cannot be marked as not completed.";
+                        throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as not completed.");
                     }
                 } else {
-                    return "Invalid task index, dear!";
+                    throw new InvalidInputException("Invalid task index, dear!");
                 }
             } catch (NumberFormatException e) {
-                return "Please provide a valid task index to uncomplete.";
+                throw new InvalidInputException("Please provide a valid task index to uncomplete.");
             }
         }
 
