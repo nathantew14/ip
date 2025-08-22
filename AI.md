@@ -1,4 +1,4 @@
-Using the VSCode integrated LLM panel.
+Using the VSCode integrated Copilot panel with GPT-4.1.
 
 # Level-0
 Used GPT-4.1 to change the ASCII art from Duke to Gertrude, but it can't seem to get the ASCII art right.Neither could Deepseek. Gave up and removed the banner. Also generated the intro in a grandmotherly tone.
@@ -21,3 +21,6 @@ AI was unable to tell me to use chmod to allow me to run my `runtest.sh`
 
 # Level-5
 Used AI to generate the exception class and use it throughout Gertrude.
+
+# Level-6
+Hit monthly chat messages quota on the integrated VSCode Copilot :(

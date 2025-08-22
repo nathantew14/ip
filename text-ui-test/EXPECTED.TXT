@@ -47,4 +47,25 @@ You: Gertrude: Here are your tasks:
 2. [D] [ ] finish iP (by: 4:00pm)
 3. [E] [X] exco meeting (from: 5pm to: 6pm)
 
+You: Gertrude: Please provide a valid task index to remove.
+
+You: Gertrude: Removed task #2: finish iP
+
+You: Gertrude: Here are your tasks:
+1. [T] [ ] find nemo
+2. [E] [X] exco meeting (from: 5pm to: 6pm)
+
+You: Gertrude: Removed task #2: exco meeting
+
+You: Gertrude: Here are your tasks:
+1. [T] [ ] find nemo
+
+You: Gertrude: Invalid task index, dear!
+
+You: Gertrude: Removed task #1: find nemo
+
+You: Gertrude: No tasks yet, dear!
+
+You: Gertrude: No tasks to remove, dear!
+
 You: Gertrude: Goodbye, dear! Take care and come back anytime you need me.

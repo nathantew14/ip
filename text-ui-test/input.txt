@@ -13,4 +13,13 @@ mark:3
 list
 unmark:2
 list
+remove:
+remove:2
+list
+remove:2
+list
+remove:2
+remove:1
+list
+remove:1
 bye

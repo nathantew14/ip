@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Gertrude {
     private static final String ADD_TODO_PREFIX = "add:";
+    private static final String REMOVE_TODO_PREFIX = "remove:";
     private static final String LIST_TODOS_COMMAND = "list";
     private static final String COMPLETE_TODO_PREFIX = "mark:";
     private static final String UNCOMPLETE_TODO_PREFIX = "unmark:";
@@ -140,6 +141,24 @@ public class Gertrude {
                 }
             } catch (NumberFormatException e) {
                 throw new InvalidInputException("Please provide a valid task index to uncomplete.");
+            }
+        }
+
+        if (input.toLowerCase().startsWith(REMOVE_TODO_PREFIX)) {
+            String idxStr = input.substring(REMOVE_TODO_PREFIX.length()).trim();
+            try {
+                if (tasks.isEmpty()) {
+                    throw new InvalidInputException("No tasks to remove, dear!");
+                }
+                int idx = Integer.parseInt(idxStr) - 1;
+                if (idx >= 0 && idx < tasks.size()) {
+                    Task removed = tasks.remove(idx);
+                    return "Removed task #" + (idx + 1) + ": " + removed.getTitle();
+                } else {
+                    throw new InvalidInputException("Invalid task index, dear!");
+                }
+            } catch (NumberFormatException e) {
+                throw new InvalidInputException("Please provide a valid task index to remove.");
             }
         }
 
