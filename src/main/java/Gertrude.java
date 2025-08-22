@@ -34,6 +34,8 @@ public class Gertrude {
             String content = input.substring(ADD_TODO_PREFIX.length()).trim();
             if (!content.isEmpty()) {
                 int byIndex = content.indexOf("/by");
+                int startIndex = content.indexOf("/start");
+                int endIndex = content.indexOf("/end");
                 if (byIndex != -1) {
                     String title = content.substring(0, byIndex).trim();
                     String deadline = content.substring(byIndex + 3).trim();
@@ -43,6 +45,17 @@ public class Gertrude {
                         return "Added new deadline: " + dl.getTitle() + " (by: " + dl.getDeadline() + ")";
                     } else {
                         return "Please provide both a title and a deadline.";
+                    }
+                } else if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
+                    String title = content.substring(0, startIndex).trim();
+                    String start = content.substring(startIndex + 6, endIndex).trim();
+                    String end = content.substring(endIndex + 4).trim();
+                    if (!title.isEmpty() && !start.isEmpty() && !end.isEmpty()) {
+                        Event event = new Event(title, start, end);
+                        tasks.add(event);
+                        return "Added new event: " + event.getTitle() + " (from: " + event.getStart() + " to: " + event.getEnd() + ")";
+                    } else {
+                        return "Please provide a title, start, and end for the event.";
                     }
                 } else {
                     Todo todo = new Todo(content);
