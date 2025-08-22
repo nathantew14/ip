@@ -26,4 +26,8 @@ Used AI to generate the exception class and use it throughout Gertrude.
 Hit monthly chat messages quota on the integrated VSCode Copilot :(
 
 # A-Enums
-Used Deepseek to refactor my code to use Enums in place of the command prefixes and task tags (`/by`, `/start` and `/end`), as well as to use switch-case instead. The test ensures the refactor didn't break anything.
+Used Deepseek to refactor my code to use Enums in place of the command prefixes and task tags (`/by`, `/start` and `/end`), as well as to use switch-case instead.
+Used Deepseek again to flatten nested if-else blocks and it also helpfully abstracted some repeated code into methods that could be reused, such as validateTaskIndex.
+
+The automated test ensures the refactors didn't break anything (that I remembered to test).
+
