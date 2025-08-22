@@ -31,5 +31,3 @@ Used Deepseek again to flatten nested if-else blocks and it also helpfully abstr
 
 The automated test ensures the refactors didn't break anything (that I remembered to test).
 
-# One-shot
-I exported the iP requirements to a PDF, then provided Deepseek with the requirements, my desired `input.txt` and `EXPECTED.txt`, as well as `runtest.sh`. It got surprisingly close, bar some minor syntax/formatting issues. Amazing. Leaving the result as a reverted commit just as a record.

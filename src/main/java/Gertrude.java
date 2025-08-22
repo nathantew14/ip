@@ -1,82 +1,258 @@
-// Gertrude.java
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * The main class for the Gertrude chatbot application.
- */
 public class Gertrude {
-    private static final String LINE = "-------------------------------------------------------------------------";
-    private Storage storage;
-    private TaskList tasks;
-    private Ui ui;
-
-    /**
-     * Constructs a Gertrude object with the specified file path for storage.
-     */
-    public Gertrude() {
-        ui = new Ui();
-        storage = new Storage();
-        tasks = new TaskList(storage.load());
-    }
-
-    /**
-     * Runs the chatbot until termination.
-     */
-    public void run() {
-        ui.showWelcome();
-        Scanner scanner = new Scanner(System.in);
+    // Define enums for command types and tags
+    enum CommandType {
+        ADD_TODO("add:"),
+        REMOVE_TODO("remove:"),
+        LIST_TODOS("list"),
+        COMPLETE_TODO("mark:"),
+        UNCOMPLETE_TODO("unmark:"),
+        UNKNOWN(""); // For unknown commands
         
-        while (true) {
-            String input = scanner.nextLine().trim();
-            if (input.equals("bye")) {
-                break;
-            }
-            String response = getResponse(input);
-            System.out.println(response);
+        private final String prefix;
+        
+        CommandType(String prefix) {
+            this.prefix = prefix;
         }
         
-        ui.showGoodbye();
+        public String getPrefix() {
+            return prefix;
+        }
+        
+        public static CommandType fromInput(String input) {
+            String lowerInput = input.toLowerCase();
+            for (CommandType type : values()) {
+                if (type != UNKNOWN && lowerInput.startsWith(type.getPrefix())) {
+                    return type;
+                }
+                if (type == LIST_TODOS && lowerInput.equals(type.getPrefix())) {
+                    return type;
+                }
+            }
+            return UNKNOWN;
+        }
+    }
+    
+    enum TagType {
+        BY_TAG("/by"),
+        START_TAG("/start"),
+        END_TAG("/end");
+        
+        private final String tag;
+        
+        TagType(String tag) {
+            this.tag = tag;
+        }
+        
+        public String getTag() {
+            return tag;
+        }
+    }
+    
+    private static List<Task> tasks = new ArrayList<>();
+
+    public static void main(String[] args) {
+        System.out.println("\nWelcome, dear! I'm Gertrude, your friendly AI chatbot.\n"
+                + "-------------------------------------------------------------------------\n"
+                + "If you need help, advice, or just a little chat, I'm always here for you.\n"
+                + "Now, what can I do for you today, sweetheart?\n"
+                + "-------------------------------------------------------------------------");
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.print("\nYou: ");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("bye")) break;
+            String response = "";
+            try {
+                response = getResponse(input);
+            } catch (InvalidInputException e) {
+                response = e.getMessage();
+            } finally {
+                System.out.println("Gertrude: " + response);
+            }
+        }
+
+        System.out.println("Gertrude: Goodbye, dear! Take care and come back anytime you need me.");
         scanner.close();
     }
 
-    /**
-     * Gets the response for the given user input.
-     *
-     * @param input The user input.
-     * @return The response from Gertrude.
-     */
-    public String getResponse(String input) {
-        try {
-            if (input.equals("list")) {
-                return tasks.listTasks();
-            } else if (input.startsWith("mark:")) {
-                return tasks.markTask(input);
-            } else if (input.startsWith("unmark:")) {
-                return tasks.unmarkTask(input);
-            } else if (input.startsWith("remove:")) {
-                return tasks.removeTask(input);
-            } else if (input.startsWith("add:")) {
-                return tasks.addTask(input.substring(4).trim());
-            } else if (input.equals("hi")) {
-                return "Welcome, dear! I'm Gertrude, your friendly AI chatbot.\n" + 
-                       LINE + "\n" +
-                       "If you need help, advice, or just a little chat, I'm always here for you.\n" +
-                       "Now, what can I do for you today, sweetheart?\n" +
-                       LINE;
-            } else {
-                return "I'm sorry, dear. I don't understand that command. Try 'add', 'list', 'mark', 'unmark', or 'remove'.";
-            }
-        } catch (GertrudeException e) {
-            return "Gertrude: " + e.getMessage();
+    private static String getResponse(String input) throws InvalidInputException {
+        CommandType commandType = CommandType.fromInput(input);
+        
+        switch (commandType) {
+            case ADD_TODO:
+                return handleAddTodo(input);
+                
+            case LIST_TODOS:
+                return handleListTodos();
+                
+            case COMPLETE_TODO:
+                return handleCompleteTodo(input);
+                
+            case UNCOMPLETE_TODO:
+                return handleUncompleteTodo(input);
+                
+            case REMOVE_TODO:
+                return handleRemoveTodo(input);
+                
+            default:
+                return handleUnknownCommand(input);
         }
     }
+    
+    private static String handleAddTodo(String input) throws InvalidInputException {
+        String content = input.substring(CommandType.ADD_TODO.getPrefix().length()).trim();
+        
+        if (content.isEmpty()) {
+            throw new InvalidInputException("Please provide a title for the todo.");
+        }
+        
+        int byIndex = content.indexOf(TagType.BY_TAG.getTag());
+        int startIndex = content.indexOf(TagType.START_TAG.getTag());
+        int endIndex = content.indexOf(TagType.END_TAG.getTag());
 
-    /**
-     * The main method to start the chatbot.
-     *
-     * @param args Command line arguments (not used).
-     */
-    public static void main(String[] args) {
-        new Gertrude().run();
+            // Check for invalid combinations
+            if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) ||
+                (startIndex != -1 && endIndex == -1) ||
+                (endIndex != -1 && startIndex == -1)) {
+                throw new InvalidInputException("Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
+            }
+
+        // Handle deadline task
+        if (byIndex != -1) {
+            return createDeadlineTask(content, byIndex);
+        }
+        
+        // Handle event task
+        if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
+            return createEventTask(content, startIndex, endIndex);
+        }
+        
+        // Handle simple todo task
+        if (startIndex == -1 && endIndex == -1) {
+            Todo todo = new Todo(content);
+            tasks.add(todo);
+            return "Added new todo: " + todo.getTitle();
+        }
+        
+        throw new InvalidInputException("Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
+    }
+    
+    private static String createDeadlineTask(String content, int byIndex) throws InvalidInputException {
+        String title = content.substring(0, byIndex).trim();
+        String deadline = content.substring(byIndex + TagType.BY_TAG.getTag().length()).trim();
+        
+        if (title.isEmpty() || deadline.isEmpty()) {
+            throw new InvalidInputException("Please provide both a title and a deadline.");
+        }
+        
+        Deadline dl = new Deadline(title, deadline);
+        tasks.add(dl);
+        return "Added new deadline: " + dl.getTitle() + " (by: " + dl.getDeadline() + ")";
+    }
+    
+    private static String createEventTask(String content, int startIndex, int endIndex) throws InvalidInputException {
+        String title = content.substring(0, startIndex).trim();
+        String start = content.substring(startIndex + TagType.START_TAG.getTag().length(), endIndex).trim();
+        String end = content.substring(endIndex + TagType.END_TAG.getTag().length()).trim();
+        
+        if (title.isEmpty() || start.isEmpty() || end.isEmpty()) {
+            throw new InvalidInputException("Please provide a title, start, and end for the event.");
+        }
+        
+        Event event = new Event(title, start, end);
+        tasks.add(event);
+        return "Added new event: " + event.getTitle() + " (from: " + event.getStart() + " to: " + event.getEnd() + ")";
+    }
+    
+    private static String handleListTodos() {
+        if (tasks.isEmpty()) {
+            return "No tasks yet, dear!";
+        }
+        
+        StringBuilder sb = new StringBuilder("Here are your tasks:\n");
+        for (int i = 0; i < tasks.size(); i++) {
+            sb.append(tasks.get(i).format(i)).append("\n");
+        }
+        return sb.toString().trim();
+    }
+    
+    private static String handleCompleteTodo(String input) throws InvalidInputException {
+        String idxStr = input.substring(CommandType.COMPLETE_TODO.getPrefix().length()).trim();
+        
+        try {
+            int idx = Integer.parseInt(idxStr) - 1;
+            validateTaskIndex(idx);
+            
+            Task t = tasks.get(idx);
+            if (!(t instanceof CompletableTask)) {
+                throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as completed.");
+            }
+            
+            ((CompletableTask)t).setCompleted();
+            return "Marked task #" + (idx + 1) + " as completed.";
+            
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException("Please provide a valid task index to complete.");
+        }
+    }
+    
+    private static String handleUncompleteTodo(String input) throws InvalidInputException {
+        String idxStr = input.substring(CommandType.UNCOMPLETE_TODO.getPrefix().length()).trim();
+        
+        try {
+            int idx = Integer.parseInt(idxStr) - 1;
+            validateTaskIndex(idx);
+            
+            Task t = tasks.get(idx);
+            if (!(t instanceof CompletableTask)) {
+                throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as not completed.");
+            }
+            
+            CompletableTask ct = (CompletableTask)t;
+            if (!ct.isCompleted()) {
+                throw new InvalidInputException("Task #" + (idx + 1) + " is already not completed.");
+            }
+            
+            ct.setNotCompleted();
+            return "Marked task #" + (idx + 1) + " as not completed.";
+            
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException("Please provide a valid task index to uncomplete.");
+        }
+    }
+    
+    private static String handleRemoveTodo(String input) throws InvalidInputException {
+        String idxStr = input.substring(CommandType.REMOVE_TODO.getPrefix().length()).trim();
+        
+        if (tasks.isEmpty()) {
+            throw new InvalidInputException("No tasks to remove, dear!");
+        }
+        
+        try {
+            int idx = Integer.parseInt(idxStr) - 1;
+            validateTaskIndex(idx);
+            
+            Task removed = tasks.remove(idx);
+            return "Removed task #" + (idx + 1) + ": " + removed.getTitle();
+            
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException("Please provide a valid task index to remove.");
+        }
+    }
+    
+    private static void validateTaskIndex(int idx) throws InvalidInputException {
+        if (idx < 0 || idx >= tasks.size()) {
+            throw new InvalidInputException("Invalid task index, dear!");
+        }
+    }
+    
+    private static String handleUnknownCommand(String input) {
+        return input; // Echo back the input for unknown commands
     }
 }

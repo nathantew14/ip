@@ -1,51 +1,27 @@
-// Task.java
-/**
- * Represents a task with a description and completion status.
- */
-public class Task {
-    protected String description;
-    protected boolean isDone;
+public abstract class Task {
+    protected String title;
+    protected boolean completed = false;
 
-    /**
-     * Constructs a Task with the given description.
-     *
-     * @param description The description of the task.
-     */
-    public Task(String description) {
-        this.description = description;
-        this.isDone = false;
+    public Task(String title) {
+        this.title = title;
     }
 
-    /**
-     * Returns the status icon of the task.
-     *
-     * @return "X" if done, " " if not done.
-     */
-    public String getStatusIcon() {
-        return (isDone ? "X" : " ");
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * Marks the task as done.
-     */
-    public void markAsDone() {
-        this.isDone = true;
+    public String getTaskType() {
+        return "Task";
     }
 
-    /**
-     * Marks the task as not done.
-     */
-    public void markAsNotDone() {
-        this.isDone = false;
+    public String getTitlePrefix() {
+        return String.format("[%s] ", getTaskType());
     }
 
-    /**
-     * Returns the string representation of the task.
-     *
-     * @return The string representation.
-     */
+    public abstract String format(int index);
+
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        return getTitlePrefix() + title;
     }
 }

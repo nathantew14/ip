@@ -1,29 +1,22 @@
+public class Deadline extends CompletableTask {
+    private String deadline;
 
-// Deadline.java
-/**
- * Represents a deadline task with a due date/time.
- */
-public class Deadline extends Task {
-    protected String by;
-
-    /**
-     * Constructs a Deadline with the given description and due date/time.
-     *
-     * @param description The description of the deadline.
-     * @param by The due date/time.
-     */
-    public Deadline(String description, String by) {
-        super(description);
-        this.by = by;
+    public Deadline(String title, String deadline) {
+        super(title);
+        this.deadline = deadline;
     }
 
-    /**
-     * Returns the string representation of the deadline.
-     *
-     * @return The string representation.
-     */
+    public String getDeadline() {
+        return deadline;
+    }
+
+    @Override
+    public String getTaskType() {
+        return "D";
+    }
+
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return super.toString() + " (by: " + deadline + ")";
     }
 }
