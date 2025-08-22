@@ -11,3 +11,6 @@ AI generation struggles with doing multiple things at once, so have to prompt it
 
 # Level-3
 AI generation automatically added error handling! Impressive.
+
+# Level-4
+Copying the entire question prompt results in an error. Had to try it haha.
