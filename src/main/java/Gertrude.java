@@ -11,17 +11,17 @@ public class Gertrude {
         COMPLETE_TODO("mark:"),
         UNCOMPLETE_TODO("unmark:"),
         UNKNOWN(""); // For unknown commands
-        
+
         private final String prefix;
-        
+
         CommandType(String prefix) {
             this.prefix = prefix;
         }
-        
+
         public String getPrefix() {
             return prefix;
         }
-        
+
         public static CommandType fromInput(String input) {
             String lowerInput = input.toLowerCase();
             for (CommandType type : values()) {
@@ -35,23 +35,23 @@ public class Gertrude {
             return UNKNOWN;
         }
     }
-    
+
     enum TagType {
         BY_TAG("/by"),
         START_TAG("/start"),
         END_TAG("/end");
-        
+
         private final String tag;
-        
+
         TagType(String tag) {
             this.tag = tag;
         }
-        
+
         public String getTag() {
             return tag;
         }
     }
-    
+
     private static List<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -66,7 +66,8 @@ public class Gertrude {
         while (true) {
             System.out.print("\nYou: ");
             String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("bye")) break;
+            if (input.equalsIgnoreCase("bye"))
+                break;
             String response = "";
             try {
                 response = getResponse(input);
@@ -83,28 +84,28 @@ public class Gertrude {
 
     private static String getResponse(String input) throws InvalidInputException {
         CommandType commandType = CommandType.fromInput(input);
-        
+
         switch (commandType) {
             case ADD_TODO:
                 return handleAddTodo(input);
-                
+
             case LIST_TODOS:
                 return handleListTodos();
-                
+
             case COMPLETE_TODO:
                 return handleCompleteTodo(input);
-                
+
             case UNCOMPLETE_TODO:
                 return handleUncompleteTodo(input);
-                
+
             case REMOVE_TODO:
                 return handleRemoveTodo(input);
-                
+
             default:
                 return handleUnknownCommand(input);
         }
     }
-    
+
     private static String handleAddTodo(String input) throws InvalidInputException {
         String content = input.substring(CommandType.ADD_TODO.getPrefix().length()).trim();
         if (!content.isEmpty()) {
@@ -114,9 +115,10 @@ public class Gertrude {
 
             // Check for invalid combinations
             if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) ||
-                (startIndex != -1 && endIndex == -1) ||
-                (endIndex != -1 && startIndex == -1)) {
-                throw new InvalidInputException("Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
+                    (startIndex != -1 && endIndex == -1) ||
+                    (endIndex != -1 && startIndex == -1)) {
+                throw new InvalidInputException(
+                        "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
             }
 
             if (byIndex != -1) {
@@ -136,7 +138,8 @@ public class Gertrude {
                 if (!title.isEmpty() && !start.isEmpty() && !end.isEmpty()) {
                     Event event = new Event(title, start, end);
                     tasks.add(event);
-                    return "Added new event: " + event.getTitle() + " (from: " + event.getStart() + " to: " + event.getEnd() + ")";
+                    return "Added new event: " + event.getTitle() + " (from: " + event.getStart() + " to: "
+                            + event.getEnd() + ")";
                 } else {
                     throw new InvalidInputException("Please provide a title, start, and end for the event.");
                 }
@@ -145,13 +148,14 @@ public class Gertrude {
                 tasks.add(todo);
                 return "Added new todo: " + todo.getTitle();
             } else {
-                throw new InvalidInputException("Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
+                throw new InvalidInputException(
+                        "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
             }
         } else {
             throw new InvalidInputException("Please provide a title for the todo.");
         }
     }
-    
+
     private static String handleListTodos() {
         if (tasks.isEmpty()) {
             return "No tasks yet, dear!";
@@ -162,7 +166,7 @@ public class Gertrude {
         }
         return sb.toString().trim();
     }
-    
+
     private static String handleCompleteTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.COMPLETE_TODO.getPrefix().length()).trim();
         try {
@@ -170,7 +174,7 @@ public class Gertrude {
             if (idx >= 0 && idx < tasks.size()) {
                 Task t = tasks.get(idx);
                 if (t instanceof CompletableTask) {
-                    ((CompletableTask)t).setCompleted();
+                    ((CompletableTask) t).setCompleted();
                     return "Marked task #" + (idx + 1) + " as completed.";
                 } else {
                     throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as completed.");
@@ -182,32 +186,30 @@ public class Gertrude {
             throw new InvalidInputException("Please provide a valid task index to complete.");
         }
     }
-    
+
     private static String handleUncompleteTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.UNCOMPLETE_TODO.getPrefix().length()).trim();
         try {
             int idx = Integer.parseInt(idxStr) - 1;
-            if (idx >= 0 && idx < tasks.size()) {
-                Task t = tasks.get(idx);
-                if (t instanceof CompletableTask) {
-                    CompletableTask ct = (CompletableTask)t;
-                    if (ct.isCompleted()) {
-                        ct.setNotCompleted();
-                        return "Marked task #" + (idx + 1) + " as not completed.";
-                    } else {
-                        throw new InvalidInputException("Task #" + (idx + 1) + " is already not completed.");
-                    }
-                } else {
-                    throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as not completed.");
-                }
-            } else {
+            if (!(idx >= 0 && idx < tasks.size()))
                 throw new InvalidInputException("Invalid task index, dear!");
+
+            Task t = tasks.get(idx);
+            if (!(t instanceof CompletableTask))
+                throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as not completed.");
+
+            CompletableTask ct = (CompletableTask) t;
+            if (ct.isCompleted()) {
+                ct.setNotCompleted();
+                return "Marked task #" + (idx + 1) + " as not completed.";
+            } else {
+                throw new InvalidInputException("Task #" + (idx + 1) + " is already not completed.");
             }
         } catch (NumberFormatException e) {
             throw new InvalidInputException("Please provide a valid task index to uncomplete.");
         }
     }
-    
+
     private static String handleRemoveTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.REMOVE_TODO.getPrefix().length()).trim();
         try {
@@ -225,7 +227,7 @@ public class Gertrude {
             throw new InvalidInputException("Please provide a valid task index to remove.");
         }
     }
-    
+
     private static String handleUnknownCommand(String input) {
         return input; // Echo back the input for unknown commands
     }
