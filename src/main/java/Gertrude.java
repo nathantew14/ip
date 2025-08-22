@@ -3,10 +3,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Gertrude {
-    private static final String ADD_TODO_PREFIX = "todo:";
+    private static final String ADD_TODO_PREFIX = "task:";
     private static final String LIST_TODOS_COMMAND = "list";
     private static final String COMPLETE_TODO_PREFIX = "mark:";
     private static final String UNCOMPLETE_TODO_PREFIX = "unmark:";
+    private static final String BY_TAG = "/by";
+    private static final String START_TAG = "/start";
+    private static final String END_TAG = "/end";
     private static List<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -33,25 +36,20 @@ public class Gertrude {
         if (input.toLowerCase().startsWith(ADD_TODO_PREFIX)) {
             String content = input.substring(ADD_TODO_PREFIX.length()).trim();
             if (!content.isEmpty()) {
-                int byIndex = content.indexOf("/by");
-                int startIndex = content.indexOf("/start");
-                int endIndex = content.indexOf("/end");
+                int byIndex = content.indexOf(BY_TAG);
+                int startIndex = content.indexOf(START_TAG);
+                int endIndex = content.indexOf(END_TAG);
 
                 // Check for invalid combinations
-                int tagCount = 0;
-                if (byIndex != -1) tagCount++;
-                if (startIndex != -1) tagCount++;
-                if (endIndex != -1) tagCount++;
                 if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) ||
                     (startIndex != -1 && endIndex == -1) ||
-                    (endIndex != -1 && startIndex == -1) ||
-                    tagCount > 1) {
+                    (endIndex != -1 && startIndex == -1)) {
                     return "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.";
                 }
 
                 if (byIndex != -1) {
                     String title = content.substring(0, byIndex).trim();
-                    String deadline = content.substring(byIndex + 3).trim();
+                    String deadline = content.substring(byIndex + BY_TAG.length()).trim();
                     if (!title.isEmpty() && !deadline.isEmpty()) {
                         Deadline dl = new Deadline(title, deadline);
                         tasks.add(dl);
@@ -61,8 +59,8 @@ public class Gertrude {
                     }
                 } else if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
                     String title = content.substring(0, startIndex).trim();
-                    String start = content.substring(startIndex + 6, endIndex).trim();
-                    String end = content.substring(endIndex + 4).trim();
+                    String start = content.substring(startIndex + START_TAG.length(), endIndex).trim();
+                    String end = content.substring(endIndex + END_TAG.length()).trim();
                     if (!title.isEmpty() && !start.isEmpty() && !end.isEmpty()) {
                         Event event = new Event(title, start, end);
                         tasks.add(event);
