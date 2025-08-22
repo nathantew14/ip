@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Gertrude {
-    private static final String ADD_TODO_PREFIX = "task:";
+    private static final String ADD_TODO_PREFIX = "add:";
     private static final String LIST_TODOS_COMMAND = "list";
     private static final String COMPLETE_TODO_PREFIX = "mark:";
     private static final String UNCOMPLETE_TODO_PREFIX = "unmark:";

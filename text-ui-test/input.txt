@@ -1,0 +1,12 @@
+hi
+add:find nemo
+add:finish iP /by 4:00pm 
+add:exco meeting /start 5pm /end 6pm
+list
+mark:2
+list
+mark:3
+list
+unmark:2
+list
+bye
