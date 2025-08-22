@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Gertrude {
     private static final String ADD_TODO_PREFIX = "add todo:";
+    private static final String LIST_TODOS_COMMAND = "list todos";
     private static List<Todo> todos = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -37,7 +38,18 @@ public class Gertrude {
                 return "Please provide a title for the todo.";
             }
         }
-        
+
+        if (input.equalsIgnoreCase(LIST_TODOS_COMMAND)) {
+            if (todos.isEmpty()) {
+                return "No todos yet, dear!";
+            }
+            StringBuilder sb = new StringBuilder("Here are your todos:\n");
+            for (int i = 0; i < todos.size(); i++) {
+                sb.append((i + 1) + ". " + todos.get(i).getTitle() + "\n");
+            }
+            return sb.toString().trim();
+        }
+
         return input;
     }
 }
