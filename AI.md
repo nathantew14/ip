@@ -16,3 +16,6 @@ AI generation automatically added error handling! Impressive.
 Copying the entire question prompt results in an error. Had to try it haha.
 AI was over-eager in writing an extremely detailed logic flow to detect invalid combinations of /by, /start and /end flags, had to remove some contradicting checks.
 
+# A-TextUiTesting
+AI was unable to tell me to use chmod to allow me to run my `runtest.sh`
+

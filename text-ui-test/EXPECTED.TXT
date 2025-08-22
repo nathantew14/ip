@@ -7,9 +7,17 @@ Now, what can I do for you today, sweetheart?
 
 You: Gertrude: hi
 
+You: Gertrude: Please provide a title for the todo.
+
 You: Gertrude: Added new todo: find nemo
 
+You: Gertrude: Please provide both a title and a deadline.
+
 You: Gertrude: Added new deadline: finish iP (by: 4:00pm)
+
+You: Gertrude: Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.
+
+You: Gertrude: Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.
 
 You: Gertrude: Added new event: exco meeting (from: 5pm to: 6pm)
 
