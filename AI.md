@@ -14,3 +14,5 @@ AI generation automatically added error handling! Impressive.
 
 # Level-4
 Copying the entire question prompt results in an error. Had to try it haha.
+AI made an extremely detailed logic flow to detect invalid combinations of /by, /start and /end flags that I would not have written by hand.
+

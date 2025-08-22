@@ -36,6 +36,19 @@ public class Gertrude {
                 int byIndex = content.indexOf("/by");
                 int startIndex = content.indexOf("/start");
                 int endIndex = content.indexOf("/end");
+
+                // Check for invalid combinations
+                int tagCount = 0;
+                if (byIndex != -1) tagCount++;
+                if (startIndex != -1) tagCount++;
+                if (endIndex != -1) tagCount++;
+                if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) ||
+                    (startIndex != -1 && endIndex == -1) ||
+                    (endIndex != -1 && startIndex == -1) ||
+                    tagCount > 1) {
+                    return "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.";
+                }
+
                 if (byIndex != -1) {
                     String title = content.substring(0, byIndex).trim();
                     String deadline = content.substring(byIndex + 3).trim();
@@ -57,10 +70,12 @@ public class Gertrude {
                     } else {
                         return "Please provide a title, start, and end for the event.";
                     }
-                } else {
+                } else if (startIndex == -1 && endIndex == -1) {
                     Todo todo = new Todo(content);
                     tasks.add(todo);
                     return "Added new todo: " + todo.getTitle();
+                } else {
+                    return "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.";
                 }
             } else {
                 return "Please provide a title for the todo.";
