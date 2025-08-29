@@ -10,11 +10,27 @@ You: Gertrude: Here are the available commands:
    Add a todo. Example:
    add:find nemo
 2. add:<description> /by <deadline>
-   Add a deadline. Example:
-   add:finish iP /by 4:00pm
+   Add a deadline. Examples:
+   add:finish iP /by 2/12/2019 1800
+   add:finish iP /by 2/12/2019 6:00am
+   add:finish iP /by 2019-12-02 18:00
+   add:finish iP /by 2019-12-02
+   Supported date formats:
+   - d/M/yyyy HHmm
+   - d/M/yyyy h:mma
+   - d/M/yyyy HH:mm
+   - d/M/yyyy
+   - yyyy-MM-dd HHmm
+   - yyyy-MM-dd h:mma
+   - yyyy-MM-dd HH:mm
+   - yyyy-MM-dd
+   - HHmm
+   - HH:mm
+   - h:mma
+   - ha
 3. add:<description> /start <start time> /end <end time>
    Add an event with a start and end time. Example:
-   add:exco meeting /start 5pm /end 6pm
+   add:exco meeting /start 2/12/2019 5:00pm /end 2/12/2019 6:00pm
 4. list
    List all tasks.
 5. mark:<task id>
@@ -34,11 +50,27 @@ You: Gertrude: Here are the available commands:
    Add a todo. Example:
    add:find nemo
 2. add:<description> /by <deadline>
-   Add a deadline. Example:
-   add:finish iP /by 4:00pm
+   Add a deadline. Examples:
+   add:finish iP /by 2/12/2019 1800
+   add:finish iP /by 2/12/2019 6:00am
+   add:finish iP /by 2019-12-02 18:00
+   add:finish iP /by 2019-12-02
+   Supported date formats:
+   - d/M/yyyy HHmm
+   - d/M/yyyy h:mma
+   - d/M/yyyy HH:mm
+   - d/M/yyyy
+   - yyyy-MM-dd HHmm
+   - yyyy-MM-dd h:mma
+   - yyyy-MM-dd HH:mm
+   - yyyy-MM-dd
+   - HHmm
+   - HH:mm
+   - h:mma
+   - ha
 3. add:<description> /start <start time> /end <end time>
    Add an event with a start and end time. Example:
-   add:exco meeting /start 5pm /end 6pm
+   add:exco meeting /start 2/12/2019 5:00pm /end 2/12/2019 6:00pm
 4. list
    List all tasks.
 5. mark:<task id>
@@ -59,39 +91,39 @@ You: Gertrude: Added new todo: find nemo
 
 You: Gertrude: Please provide both a title and a deadline.
 
-You: Gertrude: Added new deadline: finish iP (by: 4:00pm)
+You: Gertrude: Added new deadline: finish iP (by: 30 aug 2025, 4:00pm)
 
 You: Gertrude: Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.
 
 You: Gertrude: Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.
 
-You: Gertrude: Added new event: exco meeting (from: 5pm to: 6pm)
+You: Gertrude: Added new event: exco meeting (from: 30 aug 2025, 5:00pm to: 29 aug 2025, 6:00pm)
 
 You: Gertrude: Here are your tasks:
 1. [T] [ ] find nemo
-2. [D] [ ] finish iP (by: 4:00pm)
-3. [E] [ ] exco meeting (from: 5pm to: 6pm)
+2. [D] [ ] finish iP (by: 30 aug 2025, 4:00pm)
+3. [E] [ ] exco meeting (from: 30 aug 2025, 5:00pm to: 29 aug 2025, 6:00pm)
 
 You: Gertrude: Marked task #2 as completed.
 
 You: Gertrude: Here are your tasks:
 1. [T] [ ] find nemo
-2. [D] [X] finish iP (by: 4:00pm)
-3. [E] [ ] exco meeting (from: 5pm to: 6pm)
+2. [D] [X] finish iP (by: 30 aug 2025, 4:00pm)
+3. [E] [ ] exco meeting (from: 30 aug 2025, 5:00pm to: 29 aug 2025, 6:00pm)
 
 You: Gertrude: Marked task #3 as completed.
 
 You: Gertrude: Here are your tasks:
 1. [T] [ ] find nemo
-2. [D] [X] finish iP (by: 4:00pm)
-3. [E] [X] exco meeting (from: 5pm to: 6pm)
+2. [D] [X] finish iP (by: 30 aug 2025, 4:00pm)
+3. [E] [X] exco meeting (from: 30 aug 2025, 5:00pm to: 29 aug 2025, 6:00pm)
 
 You: Gertrude: Marked task #2 as not completed.
 
 You: Gertrude: Here are your tasks:
 1. [T] [ ] find nemo
-2. [D] [ ] finish iP (by: 4:00pm)
-3. [E] [X] exco meeting (from: 5pm to: 6pm)
+2. [D] [ ] finish iP (by: 30 aug 2025, 4:00pm)
+3. [E] [X] exco meeting (from: 30 aug 2025, 5:00pm to: 29 aug 2025, 6:00pm)
 
 You: Gertrude: Please provide a valid task index to remove.
 
@@ -99,7 +131,7 @@ You: Gertrude: Removed task #2: finish iP
 
 You: Gertrude: Here are your tasks:
 1. [T] [ ] find nemo
-2. [E] [X] exco meeting (from: 5pm to: 6pm)
+2. [E] [X] exco meeting (from: 30 aug 2025, 5:00pm to: 29 aug 2025, 6:00pm)
 
 You: Gertrude: Removed task #2: exco meeting
 
