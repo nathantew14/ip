@@ -22,6 +22,11 @@ public class DateTimeParser {
         "HH:mm"             // Example: 18:00
     };
 
+    // Formatter for file storage
+    public static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    // Formatter for display
+    public static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
+
     public static LocalDateTime parse(String input) throws IllegalArgumentException {
         for (String pattern : DATE_TIME_PATTERNS) {
             try {

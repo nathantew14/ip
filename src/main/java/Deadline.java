@@ -1,14 +1,8 @@
 import util.DateTimeParser;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Deadline extends CompletableTask {
     private LocalDateTime deadline;
-
-    // Formatter for file storage
-    private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    // Formatter for display
-    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
 
     public Deadline(String title, String deadline) throws InvalidDateFormatException {
         super(title);
@@ -16,7 +10,7 @@ public class Deadline extends CompletableTask {
     }
 
     public String getDeadline() {
-        return deadline.format(DISPLAY_FORMAT).toLowerCase();
+        return deadline.format(DateTimeParser.DISPLAY_FORMAT).toLowerCase();
     }
 
     @Override
@@ -31,6 +25,6 @@ public class Deadline extends CompletableTask {
 
     @Override
     public String toFileFormat() {
-        return super.toFileFormat() + " | " + deadline.format(STORAGE_FORMAT);
+        return super.toFileFormat() + " | " + deadline.format(DateTimeParser.STORAGE_FORMAT);
     }
 }

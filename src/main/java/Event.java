@@ -1,15 +1,9 @@
 import util.DateTimeParser;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Event extends CompletableTask {
     private LocalDateTime start;
     private LocalDateTime end;
-
-    // Formatter for file storage
-    private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    // Formatter for display
-    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
 
     public Event(String title, String start, String end) throws InvalidDateFormatException {
         super(title);
@@ -18,11 +12,11 @@ public class Event extends CompletableTask {
     }
 
     public String getStart() {
-        return start.format(DISPLAY_FORMAT).toLowerCase();
+        return start.format(DateTimeParser.DISPLAY_FORMAT).toLowerCase();
     }
 
     public String getEnd() {
-        return end.format(DISPLAY_FORMAT).toLowerCase();
+        return end.format(DateTimeParser.DISPLAY_FORMAT).toLowerCase();
     }
 
     @Override
@@ -37,6 +31,6 @@ public class Event extends CompletableTask {
 
     @Override
     public String toFileFormat() {
-        return super.toFileFormat() + " | " + start.format(STORAGE_FORMAT) + " | " + end.format(STORAGE_FORMAT);
+        return super.toFileFormat() + " | " + start.format(DateTimeParser.STORAGE_FORMAT) + " | " + end.format(DateTimeParser.STORAGE_FORMAT);
     }
 }
