@@ -29,6 +29,10 @@ public class CompletableTask extends Task {
     public String format(int index) {
         return (index + 1) + ". " + toString();
     }
+    
+    public String toFileFormat() {
+        return getTaskType() + " | " + (isCompleted() ? "1" : "0") + " | " + getTitle();
+    }
 
     @Override
     public String toString() {

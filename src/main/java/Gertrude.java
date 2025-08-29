@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +53,12 @@ public class Gertrude {
         }
     }
     
+    private static final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
     private static List<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
+        loadTasksFromFile(); // Load tasks from file at startup
+
         System.out.println("\nWelcome, dear! I'm Gertrude, your friendly AI chatbot.\n"
                 + "-------------------------------------------------------------------------\n"
                 + "If you need help, advice, or just a little chat, I'm always here for you.\n"
@@ -79,6 +83,42 @@ public class Gertrude {
 
         System.out.println("Gertrude: Goodbye, dear! Take care and come back anytime you need me.");
         scanner.close();
+    }
+
+    private static void saveTasksToFile() {
+        try {
+            File file = new File(DATA_FILE_PATH);
+            file.getParentFile().mkdirs(); // Ensure the parent directory exists
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+            for (Task task : tasks) {
+                writer.write(task.toFileFormat());
+                writer.newLine();
+            }
+
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Gertrude: Oops! I couldn't save your tasks, dear.");
+        }
+    }
+
+    private static void loadTasksFromFile() {
+        File file = new File(DATA_FILE_PATH);
+        if (!file.exists()) {
+            return; // No file to load from
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Task task = Task.fromFileFormat(line);
+                if (task != null) {
+                    tasks.add(task);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Gertrude: Oops! I couldn't load your tasks, dear.");
+        }
     }
 
     private static String getResponse(String input) throws InvalidInputException {

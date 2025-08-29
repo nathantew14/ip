@@ -19,4 +19,9 @@ public class Deadline extends CompletableTask {
     public String toString() {
         return super.toString() + " (by: " + deadline + ")";
     }
+
+    @Override
+    public String toFileFormat() {
+        return super.toFileFormat() + " | " + deadline;
+    }
 }
