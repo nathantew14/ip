@@ -25,9 +25,8 @@ public class DateTimeParser {
         }
         for (String pattern : DATE_TIME_PATTERNS) {
             try {
-                System.out.println("pattern: " + pattern);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-                if (pattern.contains("H")) {
+                if (pattern.toLowerCase().contains("h")) {
                     return LocalDateTime.parse(input, formatter);
                 } else {
                     LocalDate date = LocalDate.parse(input, formatter);
