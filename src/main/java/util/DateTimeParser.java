@@ -7,6 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class DateTimeParser {
+    // Formatter for file storage
+    public static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    // Formatter for display
+    public static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
+
     // Flexible input patterns
     private static final String[] DATE_TIME_PATTERNS = {
         "d/M/yyyy HHmm",    // Example: 2/12/2019 1800
@@ -19,16 +24,15 @@ public class DateTimeParser {
         "yyyy-MM-dd",       // Example: 2019-12-02
         "HHmm",             // Example: 1800
         "H:mma",            // Example: 6:00am
-        "HH:mm"             // Example: 18:00
+        "HH:mm",             // Example: 18:00
     };
 
-    // Formatter for file storage
-    public static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    // Formatter for display
-    public static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
-
     public static LocalDateTime parse(String input) throws IllegalArgumentException {
+        try {
+            return LocalDateTime.parse(input, STORAGE_FORMAT);
+        } catch (DateTimeParseException ignored) {} //try with custom patterns
         for (String pattern : DATE_TIME_PATTERNS) {
+            System.out.println(pattern);
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
                 if (pattern.contains("H")) { // has time component
