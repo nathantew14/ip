@@ -32,9 +32,11 @@ Used Deepseek again to flatten nested if-else blocks and it also helpfully abstr
 The automated test ensures the refactors didn't break anything (that I remembered to test).
 
 # Level-7
-Prompt output from the questino prompt looked mostly correct, but I made a general formatToFile that could be reused by the children of CompleteableTask. For some reason, saveTasksToFile was not used in the generated code.
+Prompt output from the question prompt looked mostly correct, but I made a general formatToFile that could be reused by the children of CompleteableTask. For some reason, saveTasksToFile was not used in the generated code.
 
 Prompted again to use an enum to represent the outcome of loading the tasks from file. Unfortunately, will need more complicated testing procedure to account for the different welcome messages.
+
+Will also need to handle the different starting states when testing: save file available, not available or corrupted.
 
 Also asked AI (a few times) to give me a `help` message (I legit forgot the commands myself)
 
@@ -42,3 +44,13 @@ Also asked AI (a few times) to give me a `help` message (I legit forgot the comm
 Tried GPT-5 and Claude Sonnet 4 but it does a bit more than I'd like it to, like shortening variable names unnecessarily, undoing some of my previous simple refactorings or just general complex logic that is not necessary.
 
 GPT-4o did much better.
+
+Unfortunately, the auto-generated datetime formats were a little unintuitive, and I took more time than I would have liked to fix it up in a few commits.
+
+Introducing datetime also makes the testing even more complicated to do properly.
+
+# A-MoreOOP
+Refactoring step-by-step mostly worked well, although the Copilot GPT struggled with trying to import static class member enums. For some reason, normal GPT on the website recognised that it wouldn't really work, and I either had to separate the enums into their own files or start using packages.
+
+# A-Packages
+GPT super quicklty refactored most things into packages, and I just had to mop up the leftovers.
