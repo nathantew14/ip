@@ -15,12 +15,14 @@ public class DateTimeParser {
     // Flexible input patterns
     private static final String[] DATE_TIME_PATTERNS = {
         "d/M/yyyy HHmm",    // Example: 2/12/2019 1800
-        "d/M/yyyy h:mma",   // Example: 2/12/2019 6:00am
         "d/M/yyyy HH:mm",   // Example: 2/12/2019 18:00
+        "d/M/yyyy h:mma",   // Example: 2/12/2019 6:00am
+        "d/M/yyyy ha",      // Example: 2/12/2019 6am
         "d/M/yyyy",         // Example: 2/12/2019
         "yyyy-MM-dd HHmm",  // Example: 2019-12-02 1800
-        "yyyy-MM-dd h:mma", // Example: 2019-12-02 6:00am
         "yyyy-MM-dd HH:mm", // Example: 2019-12-02 18:00
+        "yyyy-MM-dd h:mma", // Example: 2019-12-02 6:00am
+        "yyyy-MM-dd ha",    // Example: 2019-12-02 6am
         "yyyy-MM-dd",       // Example: 2019-12-02
         "HHmm",             // Example: 1800
         "HH:mm",            // Example: 18:00
