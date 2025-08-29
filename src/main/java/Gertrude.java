@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import util.DateTimeParser;
@@ -64,7 +63,10 @@ public class Gertrude {
         ERROR_READING_FILE
     }
 
+    static Ui ui;
+
     public static void main(String[] args) {
+        ui = new Ui();
         String welcomeMessage;
 
         ReadTaskFileResult loadResult = loadTasksFromFile(); // Load tasks from file at startup
@@ -84,17 +86,10 @@ public class Gertrude {
                 welcomeMessage = "";
         }
 
-        System.out.println("\n" + welcomeMessage + "\n"
-                + "-------------------------------------------------------------------------\n"
-                + "If you need help, advice, or just a little chat, I'm always here for you.\n"
-                + "Now, what can I do for you today, sweetheart?\n"
-                + "-------------------------------------------------------------------------");
-
-        Scanner scanner = new Scanner(System.in);
+        ui.showWelcomeMessage(welcomeMessage);
 
         while (true) {
-            System.out.print("\nYou: ");
-            String input = scanner.nextLine();
+            String input = ui.readCommand();
             if (input.equalsIgnoreCase("bye")) break;
             String response = "";
             try {
@@ -102,13 +97,13 @@ public class Gertrude {
             } catch (InvalidInputException e) {
                 response = e.getMessage();
             } finally {
-                System.out.println("Gertrude: " + response);
+                ui.showResponse(response);
                 saveTasksToFile(); // Save tasks to file after each interaction
             }
         }
 
-        System.out.println("Gertrude: Goodbye, dear! Take care and come back anytime you need me.");
-        scanner.close();
+        ui.showGoodbyeMessage();
+        ui.close();
     }
 
     private static void saveTasksToFile() {
@@ -124,7 +119,7 @@ public class Gertrude {
 
             writer.close();
         } catch (IOException e) {
-            System.out.println("Gertrude: Oops! I couldn't save your tasks, dear.");
+            ui.showResponse("Oops! I couldn't save your tasks, dear.");
         }
     }
 
@@ -150,23 +145,23 @@ public class Gertrude {
 
     private static String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
         CommandType commandType = CommandType.fromInput(input);
-        
+
         switch (commandType) {
             case ADD_TODO:
                 return handleAddTodo(input);
-                
+
             case LIST_TODOS:
                 return handleListTodos();
-                
+
             case COMPLETE_TODO:
                 return handleCompleteTodo(input);
-                
+
             case UNCOMPLETE_TODO:
                 return handleUncompleteTodo(input);
-                
+
             case REMOVE_TODO:
                 return handleRemoveTodo(input);
-                
+
             case HELP:
                 return handleHelp(); // Handle help command
             default:
