@@ -11,7 +11,7 @@ public class Event extends CompletableTask {
     // Formatter for display
     private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
 
-    public Event(String title, String start, String end) {
+    public Event(String title, String start, String end) throws InvalidDateFormatException {
         super(title);
         this.start = DateTimeParser.parse(start);
         this.end = DateTimeParser.parse(end);

@@ -10,7 +10,7 @@ public class Deadline extends CompletableTask {
     // Formatter for display
     private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
 
-    public Deadline(String title, String deadline) {
+    public Deadline(String title, String deadline) throws InvalidDateFormatException {
         super(title);
         this.deadline = DateTimeParser.parse(deadline);
     }

@@ -8,13 +8,24 @@ import java.time.format.DateTimeParseException;
 public class DateTimeParser {
     // Flexible input patterns
     private static final String[] DATE_TIME_PATTERNS = {
-        "d/M/yyyy HHmm", "d/M/yyyy H:mm", "d/M/yyyy HH:mm", "d/M/yyyy",
+        "d/M/yyyy HHmm", "d/M/yyyy h:mma", "d/M/yyyy HH:mm", "d/M/yyyy",
         "yyyy-MM-dd HHmm", "yyyy-MM-dd HH:mm", "yyyy-MM-dd"
     };
 
     public static LocalDateTime parse(String input) {
+        try {
+            return LocalDateTime.parse(input);
+        } catch (DateTimeParseException e) {
+            // Ignore and try LocalDate
+        }
+        try {
+            return LocalDate.parse(input).atStartOfDay();
+        } catch (DateTimeParseException e) {
+            // Ignore and try patterns
+        }
         for (String pattern : DATE_TIME_PATTERNS) {
             try {
+                System.out.println("pattern: " + pattern);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
                 if (pattern.contains("H")) {
                     return LocalDateTime.parse(input, formatter);

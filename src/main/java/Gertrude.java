@@ -147,7 +147,7 @@ public class Gertrude {
         }
     }
 
-    private static String getResponse(String input) throws InvalidInputException {
+    private static String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
         CommandType commandType = CommandType.fromInput(input);
         
         switch (commandType) {
@@ -173,7 +173,7 @@ public class Gertrude {
         }
     }
     
-    private static String handleAddTodo(String input) throws InvalidInputException {
+    private static String handleAddTodo(String input) throws InvalidInputException, IllegalArgumentException {
         String content = input.substring(CommandType.ADD_TODO.getPrefix().length()).trim();
         
         if (content.isEmpty()) {
@@ -207,35 +207,43 @@ public class Gertrude {
             tasks.add(todo);
             return "Added new todo: " + todo.getTitle();
         }
-        
+    
         throw new InvalidInputException("Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
     }
     
     private static String createDeadlineTask(String content, int byIndex) throws InvalidInputException {
         String title = content.substring(0, byIndex).trim();
         String deadline = content.substring(byIndex + TagType.BY_TAG.getTag().length()).trim();
-        
+
         if (title.isEmpty() || deadline.isEmpty()) {
             throw new InvalidInputException("Please provide both a title and a deadline.");
         }
-        
-        Deadline dl = new Deadline(title, deadline);
-        tasks.add(dl);
-        return "Added new deadline: " + dl.getTitle() + " (by: " + dl.getDeadline() + ")";
+
+        try {
+            Deadline dl = new Deadline(title, deadline);
+            tasks.add(dl);
+            return "Added new deadline: " + dl.getTitle() + " (by: " + dl.getDeadline() + ")";
+        } catch (InvalidDateFormatException e) {
+            throw new InvalidInputException(e.getMessage());
+        }
     }
-    
+
     private static String createEventTask(String content, int startIndex, int endIndex) throws InvalidInputException {
         String title = content.substring(0, startIndex).trim();
         String start = content.substring(startIndex + TagType.START_TAG.getTag().length(), endIndex).trim();
         String end = content.substring(endIndex + TagType.END_TAG.getTag().length()).trim();
-        
+
         if (title.isEmpty() || start.isEmpty() || end.isEmpty()) {
             throw new InvalidInputException("Please provide a title, start, and end for the event.");
         }
-        
-        Event event = new Event(title, start, end);
-        tasks.add(event);
-        return "Added new event: " + event.getTitle() + " (from: " + event.getStart() + " to: " + event.getEnd() + ")";
+
+        try {
+            Event event = new Event(title, start, end);
+            tasks.add(event);
+            return "Added new event: " + event.getTitle() + " (from: " + event.getStart() + " to: " + event.getEnd() + ")";
+        } catch (InvalidDateFormatException e) {
+            throw new InvalidInputException(e.getMessage());
+        }
     }
     
     private static String handleListTodos() {
