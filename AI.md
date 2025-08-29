@@ -53,4 +53,4 @@ Introducing datetime also makes the testing even more complicated to do properly
 Refactoring step-by-step mostly worked well, although the Copilot GPT struggled with trying to import static class member enums. For some reason, normal GPT on the website recognised that it wouldn't really work, and I either had to separate the enums into their own files or start using packages.
 
 # A-Packages
-GPT super quicklty refactored most things into packages, and I just had to mop up the leftovers.
+GPT super quickly refactored most things into packages, and I just had to mop up the leftovers.
