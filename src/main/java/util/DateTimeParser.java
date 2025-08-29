@@ -8,25 +8,21 @@ import java.time.format.DateTimeParseException;
 public class DateTimeParser {
     // Flexible input patterns
     private static final String[] DATE_TIME_PATTERNS = {
-        "d/M/yyyy HHmm", "d/M/yyyy h:mma", "d/M/yyyy HH:mm", "d/M/yyyy",
-        "yyyy-MM-dd HHmm", "yyyy-MM-dd HH:mm", "yyyy-MM-dd"
+        "d/M/yyyy HHmm",    // Example: 2/12/2019 1800
+        "d/M/yyyy H:mma",   // Example: 2/12/2019 6:00am
+        "d/M/yyyy HH:mm",   // Example: 2/12/2019 18:00
+        "d/M/yyyy",         // Example: 2/12/2019
+        "yyyy-MM-dd HHmm",  // Example: 2019-12-02 1800
+        "yyyy-MM-dd H:mma", // Example: 2019-12-02 6:00am
+        "yyyy-MM-dd HH:mm", // Example: 2019-12-02 18:00
+        "yyyy-MM-dd"        // Example: 2019-12-02
     };
 
-    public static LocalDateTime parse(String input) {
-        try {
-            return LocalDateTime.parse(input);
-        } catch (DateTimeParseException e) {
-            // Ignore and try LocalDate
-        }
-        try {
-            return LocalDate.parse(input).atStartOfDay();
-        } catch (DateTimeParseException e) {
-            // Ignore and try patterns
-        }
+    public static LocalDateTime parse(String input) throws IllegalArgumentException {
         for (String pattern : DATE_TIME_PATTERNS) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-                if (pattern.toLowerCase().contains("h")) {
+                if (pattern.contains("H")) { // has time component
                     return LocalDateTime.parse(input, formatter);
                 } else {
                     LocalDate date = LocalDate.parse(input, formatter);
@@ -34,6 +30,10 @@ public class DateTimeParser {
                 }
             } catch (DateTimeParseException ignored) {}
         }
-        throw new IllegalArgumentException("Invalid date format. Please use formats like '2/12/2019 1800' or '2019-12-02'.");
+        throw new IllegalArgumentException("Invalid date format. Please use formats like '2/12/2019 1800', '2019-12-02', 'd-M-yyyy H:mm', or 'yyyy/MM/dd HH:mm'.");
+    }
+
+    public static String[] getAvailableFormats() {
+        return DATE_TIME_PATTERNS;
     }
 }

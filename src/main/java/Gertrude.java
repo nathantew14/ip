@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import util.DateTimeParser;
 
 public class Gertrude {
     // Define enums for command types and tags
@@ -329,28 +330,39 @@ public class Gertrude {
     }
     
     private static String handleHelp() {
-        return "Here are the available commands:\n"
-                + "1. add:<description>\n"
-                + "   Add a todo. Example:\n"
-                + "   add:find nemo\n"
-                + "2. add:<description> /by <deadline>\n"
-                + "   Add a deadline. Example:\n"
-                + "   add:finish iP /by 4:00pm\n"
-                + "3. add:<description> /start <start time> /end <end time>\n"
-                + "   Add an event with a start and end time. Example:\n"
-                + "   add:exco meeting /start 5pm /end 6pm\n"
-                + "4. list\n"
-                + "   List all tasks.\n"
-                + "5. mark:<task id>\n"
-                + "   Mark a task as completed. Example:\n"
-                + "   mark:2\n"
-                + "6. unmark:<task id>\n"
-                + "   Unmark a task as not completed. Example:\n"
-                + "   unmark:2\n"
-                + "7. remove:<task id>\n"
-                + "   Remove a task. Example:\n"
-                + "   remove:2\n"
-                + "8. help\n"
-                + "   Show this help message.";
+        StringBuilder helpMessage = new StringBuilder("Here are the available commands:\n")
+            .append("1. add:<description>\n")
+            .append("   Add a todo. Example:\n")
+            .append("   add:find nemo\n")
+            .append("2. add:<description> /by <deadline>\n")
+            .append("   Add a deadline. Examples:\n")
+            .append("   add:finish iP /by 2/12/2019 1800\n")
+            .append("   add:finish iP /by 2/12/2019 6:00am\n")
+            .append("   add:finish iP /by 2019-12-02 18:00\n")
+            .append("   add:finish iP /by 2019-12-02\n")
+            .append("   Supported date formats:\n");
+
+        for (String format : DateTimeParser.getAvailableFormats()) {
+            helpMessage.append("   - ").append(format).append("\n");
+        }
+
+        helpMessage.append("3. add:<description> /start <start time> /end <end time>\n")
+            .append("   Add an event with a start and end time. Example:\n")
+            .append("   add:exco meeting /start 2/12/2019 5:00pm /end 2/12/2019 6:00pm\n")
+            .append("4. list\n")
+            .append("   List all tasks.\n")
+            .append("5. mark:<task id>\n")
+            .append("   Mark a task as completed. Example:\n")
+            .append("   mark:2\n")
+            .append("6. unmark:<task id>\n")
+            .append("   Unmark a task as not completed. Example:\n")
+            .append("   unmark:2\n")
+            .append("7. remove:<task id>\n")
+            .append("   Remove a task. Example:\n")
+            .append("   remove:2\n")
+            .append("8. help\n")
+            .append("   Show this help message.");
+
+        return helpMessage.toString();
     }
 }
