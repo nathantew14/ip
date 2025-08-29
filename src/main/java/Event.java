@@ -1,19 +1,28 @@
+import util.DateTimeParser;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Event extends CompletableTask {
-    private String start;
-    private String end;
+    private LocalDateTime start;
+    private LocalDateTime end;
+
+    // Formatter for file storage
+    private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    // Formatter for display
+    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
 
     public Event(String title, String start, String end) {
         super(title);
-        this.start = start;
-        this.end = end;
+        this.start = DateTimeParser.parse(start);
+        this.end = DateTimeParser.parse(end);
     }
 
     public String getStart() {
-        return start;
+        return start.format(DISPLAY_FORMAT).toLowerCase();
     }
 
     public String getEnd() {
-        return end;
+        return end.format(DISPLAY_FORMAT).toLowerCase();
     }
 
     @Override
@@ -23,11 +32,11 @@ public class Event extends CompletableTask {
 
     @Override
     public String toString() {
-        return super.toString() + " (from: " + start + " to: " + end + ")";
+        return super.toString() + " (from: " + getStart() + " to: " + getEnd() + ")";
     }
 
     @Override
     public String toFileFormat() {
-        return super.toFileFormat() + " | " + start + " | " + end;
+        return super.toFileFormat() + " | " + start.format(STORAGE_FORMAT) + " | " + end.format(STORAGE_FORMAT);
     }
 }
