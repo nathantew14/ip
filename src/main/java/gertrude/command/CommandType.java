@@ -1,3 +1,5 @@
+package gertrude.command;
+
 public enum CommandType {
     ADD_TODO("add:"),
     REMOVE_TODO("remove:"),

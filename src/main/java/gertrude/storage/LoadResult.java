@@ -1,4 +1,7 @@
+package gertrude.storage;
 import java.util.List;
+
+import gertrude.task.Task;
 
 public class LoadResult {
     public enum Status {

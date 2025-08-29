@@ -1,3 +1,5 @@
+package gertrude.command;
+
 public enum TagType {
     BY_TAG("/by"),
     START_TAG("/start"),

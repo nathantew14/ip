@@ -1,3 +1,4 @@
+package gertrude.storage;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -6,6 +7,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import gertrude.storage.LoadResult.Status;
+import gertrude.task.Task;
 
 public class Storage {
     private final String dataFilePath;
