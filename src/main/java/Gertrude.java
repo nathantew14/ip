@@ -56,10 +56,33 @@ public class Gertrude {
     private static final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
     private static List<Task> tasks = new ArrayList<>();
 
-    public static void main(String[] args) {
-        loadTasksFromFile(); // Load tasks from file at startup
+    enum ReadTaskFileResult {
+        SUCCESS,
+        NO_FILE_FOUND,
+        ERROR_READING_FILE
+    }
 
-        System.out.println("\nWelcome, dear! I'm Gertrude, your friendly AI chatbot.\n"
+    public static void main(String[] args) {
+        String welcomeMessage;
+
+        ReadTaskFileResult loadResult = loadTasksFromFile(); // Load tasks from file at startup
+
+        switch (loadResult) {
+            case SUCCESS:
+                welcomeMessage = "Welcome back, dear! I've loaded your tasks from the last session.";
+                break;
+            case NO_FILE_FOUND:
+                welcomeMessage = "Hello, dear! It seems like this is your first time here.\n"
+                        + "I'm Gertrude, your friendly AI chatbot. Let's get started!";
+                break;
+            case ERROR_READING_FILE:
+                welcomeMessage = "Oh no, dear! I couldn't read your tasks file. Starting fresh for now.";
+                break;
+            default:
+                welcomeMessage = "";
+        }
+
+        System.out.println("\n" + welcomeMessage + "\n"
                 + "-------------------------------------------------------------------------\n"
                 + "If you need help, advice, or just a little chat, I'm always here for you.\n"
                 + "Now, what can I do for you today, sweetheart?\n"
@@ -78,6 +101,7 @@ public class Gertrude {
                 response = e.getMessage();
             } finally {
                 System.out.println("Gertrude: " + response);
+                saveTasksToFile(); // Save tasks to file after each interaction
             }
         }
 
@@ -102,10 +126,10 @@ public class Gertrude {
         }
     }
 
-    private static void loadTasksFromFile() {
+    private static ReadTaskFileResult loadTasksFromFile() {
         File file = new File(DATA_FILE_PATH);
         if (!file.exists()) {
-            return; // No file to load from
+            return ReadTaskFileResult.NO_FILE_FOUND; // No file to load from
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -116,8 +140,9 @@ public class Gertrude {
                     tasks.add(task);
                 }
             }
+            return ReadTaskFileResult.SUCCESS;
         } catch (IOException e) {
-            System.out.println("Gertrude: Oops! I couldn't load your tasks, dear.");
+            return ReadTaskFileResult.ERROR_READING_FILE;
         }
     }
 
