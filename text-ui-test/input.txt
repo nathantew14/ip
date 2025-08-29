@@ -1,4 +1,5 @@
 hi
+help
 add:
 add:find nemo
 add:finish iP /by

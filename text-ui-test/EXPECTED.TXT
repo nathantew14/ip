@@ -1,11 +1,57 @@
 
-Welcome, dear! I'm Gertrude, your friendly AI chatbot.
+Welcome back, dear! I've loaded your tasks from the last session.
 -------------------------------------------------------------------------
 If you need help, advice, or just a little chat, I'm always here for you.
 Now, what can I do for you today, sweetheart?
 -------------------------------------------------------------------------
 
-You: Gertrude: hi
+You: Gertrude: Here are the available commands:
+1. add:<description>
+   Add a todo. Example:
+   add:find nemo
+2. add:<description> /by <deadline>
+   Add a deadline. Example:
+   add:finish iP /by 4:00pm
+3. add:<description> /start <start time> /end <end time>
+   Add an event with a start and end time. Example:
+   add:exco meeting /start 5pm /end 6pm
+4. list
+   List all tasks.
+5. mark:<task id>
+   Mark a task as completed. Example:
+   mark:2
+6. unmark:<task id>
+   Unmark a task as not completed. Example:
+   unmark:2
+7. remove:<task id>
+   Remove a task. Example:
+   remove:2
+8. help
+   Show this help message.
+
+You: Gertrude: Here are the available commands:
+1. add:<description>
+   Add a todo. Example:
+   add:find nemo
+2. add:<description> /by <deadline>
+   Add a deadline. Example:
+   add:finish iP /by 4:00pm
+3. add:<description> /start <start time> /end <end time>
+   Add an event with a start and end time. Example:
+   add:exco meeting /start 5pm /end 6pm
+4. list
+   List all tasks.
+5. mark:<task id>
+   Mark a task as completed. Example:
+   mark:2
+6. unmark:<task id>
+   Unmark a task as not completed. Example:
+   unmark:2
+7. remove:<task id>
+   Remove a task. Example:
+   remove:2
+8. help
+   Show this help message.
 
 You: Gertrude: Please provide a title for the todo.
 

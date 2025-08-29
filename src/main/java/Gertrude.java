@@ -11,6 +11,7 @@ public class Gertrude {
         LIST_TODOS("list"),
         COMPLETE_TODO("mark:"),
         UNCOMPLETE_TODO("unmark:"),
+        HELP("help"), // New help command
         UNKNOWN(""); // For unknown commands
         
         private final String prefix;
@@ -165,8 +166,10 @@ public class Gertrude {
             case REMOVE_TODO:
                 return handleRemoveTodo(input);
                 
+            case HELP:
+                return handleHelp(); // Handle help command
             default:
-                return handleUnknownCommand(input);
+                return handleHelp();
         }
     }
     
@@ -317,7 +320,29 @@ public class Gertrude {
         }
     }
     
-    private static String handleUnknownCommand(String input) {
-        return input; // Echo back the input for unknown commands
+    private static String handleHelp() {
+        return "Here are the available commands:\n"
+                + "1. add:<description>\n"
+                + "   Add a todo. Example:\n"
+                + "   add:find nemo\n"
+                + "2. add:<description> /by <deadline>\n"
+                + "   Add a deadline. Example:\n"
+                + "   add:finish iP /by 4:00pm\n"
+                + "3. add:<description> /start <start time> /end <end time>\n"
+                + "   Add an event with a start and end time. Example:\n"
+                + "   add:exco meeting /start 5pm /end 6pm\n"
+                + "4. list\n"
+                + "   List all tasks.\n"
+                + "5. mark:<task id>\n"
+                + "   Mark a task as completed. Example:\n"
+                + "   mark:2\n"
+                + "6. unmark:<task id>\n"
+                + "   Unmark a task as not completed. Example:\n"
+                + "   unmark:2\n"
+                + "7. remove:<task id>\n"
+                + "   Remove a task. Example:\n"
+                + "   remove:2\n"
+                + "8. help\n"
+                + "   Show this help message.";
     }
 }

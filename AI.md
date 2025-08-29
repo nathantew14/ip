@@ -34,4 +34,6 @@ The automated test ensures the refactors didn't break anything (that I remembere
 # Level-7
 Prompt output from the questino prompt looked mostly correct, but I made a general formatToFile that could be reused by the children of CompleteableTask. For some reason, saveTasksToFile was not used in the generated code.
 
-Prompted again to use an enum to represent the outcome of loading the tasks from file.
+Prompted again to use an enum to represent the outcome of loading the tasks from file. Unfortunately, will need more complicated testing procedure to account for the different welcome messages.
+
+Also asked AI (a few times) to give me a `help` message (I legit forgot the commands myself)
