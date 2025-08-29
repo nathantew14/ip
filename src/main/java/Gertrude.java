@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ public class Gertrude {
         LIST_TODOS("list"),
         COMPLETE_TODO("mark:"),
         UNCOMPLETE_TODO("unmark:"),
+        HELP("help"), // New help command
         UNKNOWN(""); // For unknown commands
         
         private final String prefix;
@@ -52,10 +54,36 @@ public class Gertrude {
         }
     }
     
+    private static final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
     private static List<Task> tasks = new ArrayList<>();
 
+    enum ReadTaskFileResult {
+        SUCCESS,
+        NO_FILE_FOUND,
+        ERROR_READING_FILE
+    }
+
     public static void main(String[] args) {
-        System.out.println("\nWelcome, dear! I'm Gertrude, your friendly AI chatbot.\n"
+        String welcomeMessage;
+
+        ReadTaskFileResult loadResult = loadTasksFromFile(); // Load tasks from file at startup
+
+        switch (loadResult) {
+            case SUCCESS:
+                welcomeMessage = "Welcome back, dear! I've loaded your tasks from the last session.";
+                break;
+            case NO_FILE_FOUND:
+                welcomeMessage = "Hello, dear! It seems like this is your first time here.\n"
+                        + "I'm Gertrude, your friendly AI chatbot. Let's get started!";
+                break;
+            case ERROR_READING_FILE:
+                welcomeMessage = "Oh no, dear! I couldn't read your tasks file. Starting fresh for now.";
+                break;
+            default:
+                welcomeMessage = "";
+        }
+
+        System.out.println("\n" + welcomeMessage + "\n"
                 + "-------------------------------------------------------------------------\n"
                 + "If you need help, advice, or just a little chat, I'm always here for you.\n"
                 + "Now, what can I do for you today, sweetheart?\n"
@@ -74,11 +102,49 @@ public class Gertrude {
                 response = e.getMessage();
             } finally {
                 System.out.println("Gertrude: " + response);
+                saveTasksToFile(); // Save tasks to file after each interaction
             }
         }
 
         System.out.println("Gertrude: Goodbye, dear! Take care and come back anytime you need me.");
         scanner.close();
+    }
+
+    private static void saveTasksToFile() {
+        try {
+            File file = new File(DATA_FILE_PATH);
+            file.getParentFile().mkdirs(); // Ensure the parent directory exists
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+            for (Task task : tasks) {
+                writer.write(task.toFileFormat());
+                writer.newLine();
+            }
+
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Gertrude: Oops! I couldn't save your tasks, dear.");
+        }
+    }
+
+    private static ReadTaskFileResult loadTasksFromFile() {
+        File file = new File(DATA_FILE_PATH);
+        if (!file.exists()) {
+            return ReadTaskFileResult.NO_FILE_FOUND; // No file to load from
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Task task = Task.fromFileFormat(line);
+                if (task != null) {
+                    tasks.add(task);
+                }
+            }
+            return ReadTaskFileResult.SUCCESS;
+        } catch (IOException e) {
+            return ReadTaskFileResult.ERROR_READING_FILE;
+        }
     }
 
     private static String getResponse(String input) throws InvalidInputException {
@@ -100,8 +166,10 @@ public class Gertrude {
             case REMOVE_TODO:
                 return handleRemoveTodo(input);
                 
+            case HELP:
+                return handleHelp(); // Handle help command
             default:
-                return handleUnknownCommand(input);
+                return handleHelp();
         }
     }
     
@@ -252,7 +320,29 @@ public class Gertrude {
         }
     }
     
-    private static String handleUnknownCommand(String input) {
-        return input; // Echo back the input for unknown commands
+    private static String handleHelp() {
+        return "Here are the available commands:\n"
+                + "1. add:<description>\n"
+                + "   Add a todo. Example:\n"
+                + "   add:find nemo\n"
+                + "2. add:<description> /by <deadline>\n"
+                + "   Add a deadline. Example:\n"
+                + "   add:finish iP /by 4:00pm\n"
+                + "3. add:<description> /start <start time> /end <end time>\n"
+                + "   Add an event with a start and end time. Example:\n"
+                + "   add:exco meeting /start 5pm /end 6pm\n"
+                + "4. list\n"
+                + "   List all tasks.\n"
+                + "5. mark:<task id>\n"
+                + "   Mark a task as completed. Example:\n"
+                + "   mark:2\n"
+                + "6. unmark:<task id>\n"
+                + "   Unmark a task as not completed. Example:\n"
+                + "   unmark:2\n"
+                + "7. remove:<task id>\n"
+                + "   Remove a task. Example:\n"
+                + "   remove:2\n"
+                + "8. help\n"
+                + "   Show this help message.";
     }
 }

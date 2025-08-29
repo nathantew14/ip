@@ -25,4 +25,9 @@ public class Event extends CompletableTask {
     public String toString() {
         return super.toString() + " (from: " + start + " to: " + end + ")";
     }
+
+    @Override
+    public String toFileFormat() {
+        return super.toFileFormat() + " | " + start + " | " + end;
+    }
 }
