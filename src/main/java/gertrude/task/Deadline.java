@@ -1,5 +1,9 @@
-import util.DateTimeParser;
+package gertrude.task;
+
+import gertrude.util.DateTimeParser;
 import java.time.LocalDateTime;
+
+import gertrude.exceptions.InvalidDateFormatException;
 
 public class Deadline extends CompletableTask {
     private LocalDateTime deadline;

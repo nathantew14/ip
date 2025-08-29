@@ -1,3 +1,5 @@
+package gertrude.command;
+
 public class CommandParser {
     public static CommandType parseCommand(String input) {
         String lowerInput = input.toLowerCase();

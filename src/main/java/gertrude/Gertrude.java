@@ -1,5 +1,21 @@
+package gertrude;
+
 import java.io.*;
-import util.DateTimeParser;
+import gertrude.util.DateTimeParser;
+import gertrude.util.Ui;
+import gertrude.command.CommandParser;
+import gertrude.command.CommandType;
+import gertrude.command.TagType;
+import gertrude.task.TaskList;
+import gertrude.task.Todo;
+import gertrude.task.Deadline;
+import gertrude.task.Event;
+import gertrude.task.Task;
+import gertrude.task.CompletableTask;
+import gertrude.exceptions.InvalidInputException;
+import gertrude.storage.LoadResult;
+import gertrude.storage.Storage;
+import gertrude.exceptions.InvalidDateFormatException;
 
 public class Gertrude {
     private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file

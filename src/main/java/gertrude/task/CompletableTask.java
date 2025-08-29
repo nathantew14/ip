@@ -1,3 +1,4 @@
+package gertrude.task;
 public class CompletableTask extends Task {
     private boolean completed = false;
 
