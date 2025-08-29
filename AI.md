@@ -37,3 +37,8 @@ Prompt output from the questino prompt looked mostly correct, but I made a gener
 Prompted again to use an enum to represent the outcome of loading the tasks from file. Unfortunately, will need more complicated testing procedure to account for the different welcome messages.
 
 Also asked AI (a few times) to give me a `help` message (I legit forgot the commands myself)
+
+# Level-8
+Tried GPT-5 and Claude Sonnet 4 but it does a bit more than I'd like it to, like shortening variable names unnecessarily, undoing some of my previous simple refactorings or just general complex logic that is not necessary.
+
+GPT-4o did much better.
