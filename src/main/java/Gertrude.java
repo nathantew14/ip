@@ -54,8 +54,8 @@ public class Gertrude {
         }
     }
     
-    private static final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
-    private static List<Task> tasks = new ArrayList<>();
+    private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
+    private List<Task> tasks = new ArrayList<>();
 
     enum ReadTaskFileResult {
         SUCCESS,
@@ -63,9 +63,13 @@ public class Gertrude {
         ERROR_READING_FILE
     }
 
-    static Ui ui;
+    private Ui ui;
 
     public static void main(String[] args) {
+        new Gertrude().run();
+    }
+
+    private void run() {
         ui = new Ui();
         String welcomeMessage;
 
@@ -106,7 +110,7 @@ public class Gertrude {
         ui.close();
     }
 
-    private static void saveTasksToFile() {
+    private void saveTasksToFile() {
         try {
             File file = new File(DATA_FILE_PATH);
             file.getParentFile().mkdirs(); // Ensure the parent directory exists
@@ -123,7 +127,7 @@ public class Gertrude {
         }
     }
 
-    private static ReadTaskFileResult loadTasksFromFile() {
+    private ReadTaskFileResult loadTasksFromFile() {
         File file = new File(DATA_FILE_PATH);
         if (!file.exists()) {
             return ReadTaskFileResult.NO_FILE_FOUND; // No file to load from
@@ -143,7 +147,7 @@ public class Gertrude {
         }
     }
 
-    private static String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
+    private String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
         CommandType commandType = CommandType.fromInput(input);
 
         switch (commandType) {
@@ -169,7 +173,7 @@ public class Gertrude {
         }
     }
     
-    private static String handleAddTodo(String input) throws InvalidInputException, IllegalArgumentException {
+    private String handleAddTodo(String input) throws InvalidInputException, IllegalArgumentException {
         String content = input.substring(CommandType.ADD_TODO.getPrefix().length()).trim();
         
         if (content.isEmpty()) {
@@ -207,7 +211,7 @@ public class Gertrude {
         throw new InvalidInputException("Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
     }
     
-    private static String createDeadlineTask(String content, int byIndex) throws InvalidInputException {
+    private String createDeadlineTask(String content, int byIndex) throws InvalidInputException {
         String title = content.substring(0, byIndex).trim();
         String deadline = content.substring(byIndex + TagType.BY_TAG.getTag().length()).trim();
 
@@ -224,7 +228,7 @@ public class Gertrude {
         }
     }
 
-    private static String createEventTask(String content, int startIndex, int endIndex) throws InvalidInputException {
+    private String createEventTask(String content, int startIndex, int endIndex) throws InvalidInputException {
         String title = content.substring(0, startIndex).trim();
         String start = content.substring(startIndex + TagType.START_TAG.getTag().length(), endIndex).trim();
         String end = content.substring(endIndex + TagType.END_TAG.getTag().length()).trim();
@@ -242,7 +246,7 @@ public class Gertrude {
         }
     }
     
-    private static String handleListTodos() {
+    private String handleListTodos() {
         if (tasks.isEmpty()) {
             return "No tasks yet, dear!";
         }
@@ -254,7 +258,7 @@ public class Gertrude {
         return sb.toString().trim();
     }
     
-    private static String handleCompleteTodo(String input) throws InvalidInputException {
+    private String handleCompleteTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.COMPLETE_TODO.getPrefix().length()).trim();
         
         try {
@@ -274,7 +278,7 @@ public class Gertrude {
         }
     }
     
-    private static String handleUncompleteTodo(String input) throws InvalidInputException {
+    private String handleUncompleteTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.UNCOMPLETE_TODO.getPrefix().length()).trim();
         
         try {
@@ -299,7 +303,7 @@ public class Gertrude {
         }
     }
     
-    private static String handleRemoveTodo(String input) throws InvalidInputException {
+    private String handleRemoveTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.REMOVE_TODO.getPrefix().length()).trim();
         
         if (tasks.isEmpty()) {
@@ -318,13 +322,13 @@ public class Gertrude {
         }
     }
     
-    private static void validateTaskIndex(int idx) throws InvalidInputException {
+    private void validateTaskIndex(int idx) throws InvalidInputException {
         if (idx < 0 || idx >= tasks.size()) {
             throw new InvalidInputException("Invalid task index, dear!");
         }
     }
     
-    private static String handleHelp() {
+    private String handleHelp() {
         StringBuilder helpMessage = new StringBuilder("Here are the available commands:\n")
             .append("1. add:<description>\n")
             .append("   Add a todo. Example:\n")
