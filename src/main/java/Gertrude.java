@@ -1,6 +1,4 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import util.DateTimeParser;
 
 public class Gertrude {
@@ -55,7 +53,7 @@ public class Gertrude {
     }
 
     private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
-    private List<Task> tasks = new ArrayList<>();
+    private TaskList tasks = new TaskList();
 
     enum ReadTaskFileResult {
         SUCCESS,
@@ -78,7 +76,7 @@ public class Gertrude {
 
         switch (loadResult.getStatus()) {
             case SUCCESS:
-                tasks = loadResult.getTasks();
+                tasks = new TaskList(loadResult.getTasks());
                 welcomeMessage = "Welcome back, dear! I've loaded your tasks from the last session.";
                 break;
             case NO_FILE_FOUND:
@@ -107,7 +105,7 @@ public class Gertrude {
 
             ui.showResponse(response);
             try {
-                storage.saveTasksToFile(tasks); // Use Storage class to save tasks
+                storage.saveTasksToFile(tasks.getAllTasks());
             } catch (IOException e) {
                 ui.showResponse("Oops! I couldn't save your tasks, dear.");
             }
@@ -223,12 +221,7 @@ public class Gertrude {
         if (tasks.isEmpty()) {
             return "No tasks yet, dear!";
         }
-
-        StringBuilder sb = new StringBuilder("Here are your tasks:\n");
-        for (int i = 0; i < tasks.size(); i++) {
-            sb.append(tasks.get(i).format(i)).append("\n");
-        }
-        return sb.toString().trim();
+        return "Here are your tasks:\n" + tasks.formatTasks();
     }
 
     private String handleCompleteTodo(String input) throws InvalidInputException {
@@ -238,7 +231,7 @@ public class Gertrude {
             int idx = Integer.parseInt(idxStr) - 1;
             validateTaskIndex(idx);
 
-            Task t = tasks.get(idx);
+            Task t = tasks.getByIndex(idx);
             if (!(t instanceof CompletableTask)) {
                 throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as completed.");
             }
@@ -258,7 +251,7 @@ public class Gertrude {
             int idx = Integer.parseInt(idxStr) - 1;
             validateTaskIndex(idx);
 
-            Task t = tasks.get(idx);
+            Task t = tasks.getByIndex(idx);
             if (!(t instanceof CompletableTask)) {
                 throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as not completed.");
             }
