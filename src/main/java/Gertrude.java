@@ -2,56 +2,6 @@ import java.io.*;
 import util.DateTimeParser;
 
 public class Gertrude {
-    // Define enums for command types and tags
-    enum CommandType {
-        ADD_TODO("add:"),
-        REMOVE_TODO("remove:"),
-        LIST_TODOS("list"),
-        COMPLETE_TODO("mark:"),
-        UNCOMPLETE_TODO("unmark:"),
-        HELP("help"), // New help command
-        UNKNOWN(""); // For unknown commands
-
-        private final String prefix;
-
-        CommandType(String prefix) {
-            this.prefix = prefix;
-        }
-
-        public String getPrefix() {
-            return prefix;
-        }
-
-        public static CommandType fromInput(String input) {
-            String lowerInput = input.toLowerCase();
-            for (CommandType type : values()) {
-                if (type != UNKNOWN && lowerInput.startsWith(type.getPrefix())) {
-                    return type;
-                }
-                if (type == LIST_TODOS && lowerInput.equals(type.getPrefix())) {
-                    return type;
-                }
-            }
-            return UNKNOWN;
-        }
-    }
-
-    enum TagType {
-        BY_TAG("/by"),
-        START_TAG("/start"),
-        END_TAG("/end");
-
-        private final String tag;
-
-        TagType(String tag) {
-            this.tag = tag;
-        }
-
-        public String getTag() {
-            return tag;
-        }
-    }
-
     private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
     private TaskList tasks = new TaskList();
 
@@ -116,7 +66,7 @@ public class Gertrude {
     }
 
     private String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
-        CommandType commandType = CommandType.fromInput(input);
+        CommandType commandType = CommandParser.parseCommand(input);
 
         switch (commandType) {
             case ADD_TODO:
