@@ -1,27 +1,69 @@
 package gertrude.task;
+
+/**
+ * Represents a generic task with a title and completion status.
+ */
 public abstract class Task {
     protected String title;
+    protected boolean completed = false;
 
+    /**
+     * Constructs a Task with the specified title.
+     *
+     * @param title The title of the task.
+     */
     public Task(String title) {
         this.title = title;
     }
 
+    /**
+     * Returns the title of the task.
+     *
+     * @return The title of the task.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Returns the task type.
+     *
+     * @return The task type.
+     */
     public String getTaskType() {
         return "Task";
     }
 
+    /**
+     * Returns the title prefix for the task.
+     *
+     * @return The title prefix.
+     */
     public String getTitlePrefix() {
         return String.format("[%s] ", getTaskType());
     }
 
+    /**
+     * Formats the task for display with its index.
+     *
+     * @param index The index of the task.
+     * @return A formatted string representing the task.
+     */
     public abstract String format(int index);
 
-    public abstract String toFileFormat(); // Convert task to file format
+    /**
+     * Converts the task to a file-friendly format.
+     *
+     * @return A string representation of the task for file storage.
+     */
+    public abstract String toFileFormat();
 
+    /**
+     * Parses a task from a file-friendly format.
+     *
+     * @param line The string representation of the task from the file.
+     * @return The parsed Task object.
+     */
     public static Task fromFileFormat(String line) {
         try {
             String[] parts = line.split(" \\| ");
@@ -53,6 +95,11 @@ public abstract class Task {
         }
     }
 
+    /**
+     * Returns a string representation of the task.
+     *
+     * @return A string describing the task.
+     */
     @Override
     public String toString() {
         return getTitlePrefix() + title;
