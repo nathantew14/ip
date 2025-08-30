@@ -1,24 +1,18 @@
 package gertrude.storage;
-import java.util.List;
 
 import gertrude.task.Task;
+import java.util.List;
 
 public class LoadResult {
-    public enum Status {
-        SUCCESS,
-        NO_FILE_FOUND,
-        ERROR_READING_FILE
-    }
-
-    private final Status status;
+    private final ReadTaskFileOutcome status;
     private final List<Task> tasks;
 
-    public LoadResult(Status status, List<Task> tasks) {
+    public LoadResult(ReadTaskFileOutcome status, List<Task> tasks) {
         this.status = status;
         this.tasks = tasks;
     }
 
-    public Status getStatus() {
+    public ReadTaskFileOutcome getStatus() {
         return status;
     }
 

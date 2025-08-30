@@ -20,7 +20,7 @@ public class Storage {
     public LoadResult loadTasksFromFile() {
         File file = new File(dataFilePath);
         if (!file.exists()) {
-            return new LoadResult(LoadResult.Status.NO_FILE_FOUND, new ArrayList<>());
+            return new LoadResult(ReadTaskFileOutcome.NO_FILE_FOUND, new ArrayList<>());
         }
 
         List<Task> tasks = new ArrayList<>();
@@ -32,9 +32,9 @@ public class Storage {
                     tasks.add(task);
                 }
             }
-            return new LoadResult(LoadResult.Status.SUCCESS, tasks);
+            return new LoadResult(ReadTaskFileOutcome.SUCCESS, tasks);
         } catch (IOException e) {
-            return new LoadResult(LoadResult.Status.ERROR_READING_FILE, new ArrayList<>());
+            return new LoadResult(ReadTaskFileOutcome.ERROR_READING_FILE, new ArrayList<>());
         }
     }
 

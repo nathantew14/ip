@@ -21,12 +21,6 @@ public class Gertrude {
     private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
     private TaskList tasks = new TaskList();
 
-    enum ReadTaskFileResult {
-        SUCCESS,
-        NO_FILE_FOUND,
-        ERROR_READING_FILE
-    }
-
     private Ui ui;
 
     public static void main(String[] args) {
