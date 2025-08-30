@@ -46,7 +46,8 @@ public class Event extends CompletableTask {
     }
 
     /**
-     * Returns the start time of the event as a formatted string using a custom format.
+     * Returns the start time of the event as a formatted string using a custom
+     * format.
      *
      * @param format The custom format to use.
      * @return The start time of the event in the specified format.
@@ -74,7 +75,8 @@ public class Event extends CompletableTask {
     }
 
     /**
-     * Returns the end time of the event as a formatted string using a custom format.
+     * Returns the end time of the event as a formatted string using a custom
+     * format.
      *
      * @param format The custom format to use.
      * @return The end time of the event in the specified format.

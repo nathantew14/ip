@@ -93,7 +93,7 @@ public class Gertrude {
      *
      * @param input The user input.
      * @return The response to the user input.
-     * @throws InvalidInputException If the input is invalid.
+     * @throws InvalidInputException    If the input is invalid.
      * @throws IllegalArgumentException If an illegal argument is encountered.
      */
     private String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
@@ -130,7 +130,7 @@ public class Gertrude {
      *
      * @param input The user input.
      * @return A response indicating the task was added.
-     * @throws InvalidInputException If the input is invalid.
+     * @throws InvalidInputException    If the input is invalid.
      * @throws IllegalArgumentException If an illegal argument is encountered.
      */
     private String handleAddTodo(String input) throws InvalidInputException, IllegalArgumentException {
