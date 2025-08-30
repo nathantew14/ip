@@ -17,10 +17,17 @@ import gertrude.storage.LoadResult;
 import gertrude.storage.Storage;
 import gertrude.exceptions.InvalidDateFormatException;
 
+/**
+ * The main class for the Gertrude chatbot application.
+ * Handles user input, task management, and file storage.
+ */
 public class Gertrude {
     private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
     private TaskList tasks = new TaskList();
 
+    /**
+     * Enum representing the result of reading the task file.
+     */
     enum ReadTaskFileResult {
         SUCCESS,
         NO_FILE_FOUND,
@@ -29,10 +36,18 @@ public class Gertrude {
 
     private Ui ui;
 
+    /**
+     * The main entry point for the application.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         new Gertrude().run();
     }
 
+    /**
+     * Runs the main application loop.
+     */
     private void run() {
         ui = new Ui();
         String welcomeMessage;
@@ -81,6 +96,14 @@ public class Gertrude {
         ui.close();
     }
 
+    /**
+     * Processes user input and returns a response.
+     *
+     * @param input The user input.
+     * @return The response to the user input.
+     * @throws InvalidInputException If the input is invalid.
+     * @throws IllegalArgumentException If an illegal argument is encountered.
+     */
     private String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
         CommandType commandType = CommandParser.parseCommand(input);
 
@@ -110,6 +133,14 @@ public class Gertrude {
         }
     }
 
+    /**
+     * Handles the addition of a todo task.
+     *
+     * @param input The user input.
+     * @return A response indicating the task was added.
+     * @throws InvalidInputException If the input is invalid.
+     * @throws IllegalArgumentException If an illegal argument is encountered.
+     */
     private String handleAddTodo(String input) throws InvalidInputException, IllegalArgumentException {
         String content = input.substring(CommandType.ADD_TODO.getPrefix().length()).trim();
 
@@ -150,6 +181,14 @@ public class Gertrude {
                 "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
     }
 
+    /**
+     * Creates a deadline task from user input.
+     *
+     * @param content The user input content.
+     * @param byIndex The index of the "/by" tag in the input.
+     * @return A response indicating the deadline task was added.
+     * @throws InvalidInputException If the input is invalid.
+     */
     private String createDeadlineTask(String content, int byIndex) throws InvalidInputException {
         String title = content.substring(0, byIndex).trim();
         String deadline = content.substring(byIndex + TagType.BY_TAG.getTag().length()).trim();
@@ -167,6 +206,15 @@ public class Gertrude {
         }
     }
 
+    /**
+     * Creates an event task from user input.
+     *
+     * @param content    The user input content.
+     * @param startIndex The index of the "/start" tag in the input.
+     * @param endIndex   The index of the "/end" tag in the input.
+     * @return A response indicating the event task was added.
+     * @throws InvalidInputException If the input is invalid.
+     */
     private String createEventTask(String content, int startIndex, int endIndex) throws InvalidInputException {
         String title = content.substring(0, startIndex).trim();
         String start = content.substring(startIndex + TagType.START_TAG.getTag().length(), endIndex).trim();
@@ -186,6 +234,11 @@ public class Gertrude {
         }
     }
 
+    /**
+     * Handles the listing of all tasks.
+     *
+     * @return A response listing all tasks.
+     */
     private String handleListTodos() {
         if (tasks.isEmpty()) {
             return "No tasks yet, dear!";
@@ -193,6 +246,13 @@ public class Gertrude {
         return "Here are your tasks:\n" + tasks.formatTasks();
     }
 
+    /**
+     * Handles marking a task as completed.
+     *
+     * @param input The user input.
+     * @return A response indicating the task was marked as completed.
+     * @throws InvalidInputException If the input is invalid.
+     */
     private String handleCompleteTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.COMPLETE_TODO.getPrefix().length()).trim();
 
@@ -213,6 +273,13 @@ public class Gertrude {
         }
     }
 
+    /**
+     * Handles marking a task as not completed.
+     *
+     * @param input The user input.
+     * @return A response indicating the task was marked as not completed.
+     * @throws InvalidInputException If the input is invalid.
+     */
     private String handleUncompleteTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.UNCOMPLETE_TODO.getPrefix().length()).trim();
 
@@ -238,6 +305,13 @@ public class Gertrude {
         }
     }
 
+    /**
+     * Handles removing a task.
+     *
+     * @param input The user input.
+     * @return A response indicating the task was removed.
+     * @throws InvalidInputException If the input is invalid.
+     */
     private String handleRemoveTodo(String input) throws InvalidInputException {
         String idxStr = input.substring(CommandType.REMOVE_TODO.getPrefix().length()).trim();
 
@@ -273,12 +347,23 @@ public class Gertrude {
         return "Here are the tasks matching your search:\n" + foundTasks.formatTasks();
     }
 
+    /**
+     * Validates the task index provided by the user.
+     *
+     * @param idx The task index.
+     * @throws InvalidInputException If the index is invalid.
+     */
     private void validateTaskIndex(int idx) throws InvalidInputException {
         if (idx < 0 || idx >= tasks.size()) {
             throw new InvalidInputException("Invalid task index, dear!");
         }
     }
 
+    /**
+     * Handles displaying the help message.
+     *
+     * @return The help message.
+     */
     private String handleHelp() {
         StringBuilder helpMessage = new StringBuilder("Here are the available commands:\n")
                 .append("1. add:<description>\n")

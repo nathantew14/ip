@@ -6,6 +6,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Utility class for parsing and formatting date and time strings.
+ */
 public class DateTimeParser {
     // Formatter for file storage
     public static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -30,6 +33,13 @@ public class DateTimeParser {
         "ha"                // Example: 6am
     };
 
+    /**
+     * Parses a date-time string into a LocalDateTime object.
+     *
+     * @param input The date-time string to parse.
+     * @return The parsed LocalDateTime object.
+     * @throws IllegalArgumentException If the input cannot be parsed.
+     */
     public static LocalDateTime parse(String input) throws IllegalArgumentException {
         try {
             return LocalDateTime.parse(input, STORAGE_FORMAT);
@@ -61,6 +71,11 @@ public class DateTimeParser {
         throw new IllegalArgumentException("Invalid date format. Please use formats like '2/12/2019 1800', '2019-12-02', '6:00am', or 'HH:mm'.");
     }
 
+    /**
+     * Returns the available date-time formats supported by the parser.
+     *
+     * @return An array of supported date-time formats.
+     */
     public static String[] getAvailableFormats() {
         return DATE_TIME_PATTERNS;
     }
