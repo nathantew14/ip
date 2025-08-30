@@ -52,6 +52,7 @@ public class Event extends CompletableTask {
 
     @Override
     public String toFileFormat() {
-        return super.toFileFormat() + " | " + start.format(DateTimeParser.STORAGE_FORMAT) + " | " + end.format(DateTimeParser.STORAGE_FORMAT);
+        return super.toFileFormat() + " | " + start.format(DateTimeParser.STORAGE_FORMAT) + " | "
+                + end.format(DateTimeParser.STORAGE_FORMAT);
     }
 }

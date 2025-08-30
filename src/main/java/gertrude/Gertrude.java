@@ -170,7 +170,8 @@ public class Gertrude {
         try {
             Event event = new Event(title, start, end);
             tasks.add(event);
-            return "Added new event: " + event.getTitle() + " (from: " + event.getStartAsString() + " to: " + event.getEndAsString()
+            return "Added new event: " + event.getTitle() + " (from: " + event.getStartAsString() + " to: "
+                    + event.getEndAsString()
                     + ")";
         } catch (InvalidDateFormatException e) {
             throw new InvalidInputException(e.getMessage());

@@ -1,4 +1,5 @@
 package gertrude.task;
+
 public abstract class Task {
     protected String title;
 
@@ -32,18 +33,21 @@ public abstract class Task {
             switch (type) {
                 case "T":
                     Todo todo = new Todo(title);
-                    if (isCompleted) todo.setCompleted();
+                    if (isCompleted)
+                        todo.setCompleted();
                     return todo;
                 case "D":
                     String deadline = parts[3];
                     Deadline deadlineTask = new Deadline(title, deadline);
-                    if (isCompleted) deadlineTask.setCompleted();
+                    if (isCompleted)
+                        deadlineTask.setCompleted();
                     return deadlineTask;
                 case "E":
                     String start = parts[3];
                     String end = parts[4];
                     Event event = new Event(title, start, end);
-                    if (isCompleted) event.setCompleted();
+                    if (isCompleted)
+                        event.setCompleted();
                     return event;
                 default:
                     return null;
