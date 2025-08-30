@@ -54,8 +54,9 @@ public class Gertrude {
 
         while (true) {
             String input = ui.readCommand();
-            if (input.equalsIgnoreCase("bye"))
+            if (input.equalsIgnoreCase("bye")) {
                 break;
+            }
             String response = "";
             try {
                 response = getResponse(input);

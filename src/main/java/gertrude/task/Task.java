@@ -33,21 +33,24 @@ public abstract class Task {
             switch (type) {
                 case "T":
                     Todo todo = new Todo(title);
-                    if (isCompleted)
+                    if (isCompleted) {
                         todo.setCompleted();
+                    }
                     return todo;
                 case "D":
                     String deadline = parts[3];
                     Deadline deadlineTask = new Deadline(title, deadline);
-                    if (isCompleted)
+                    if (isCompleted) {
                         deadlineTask.setCompleted();
+                    }
                     return deadlineTask;
                 case "E":
                     String start = parts[3];
                     String end = parts[4];
                     Event event = new Event(title, start, end);
-                    if (isCompleted)
+                    if (isCompleted) {
                         event.setCompleted();
+                    }
                     return event;
                 default:
                     return null;
