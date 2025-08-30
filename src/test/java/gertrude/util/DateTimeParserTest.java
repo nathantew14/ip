@@ -13,31 +13,32 @@ class DateTimeParserTest {
 
     @Test
     void parse_validDateTimeFormats_shouldReturnCorrectLocalDateTime() {
-        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), 
-                     DateTimeParser.parse("2/12/2019 1800"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), 
-                     DateTimeParser.parse("2/12/2019 18:00"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 6, 0), 
-                     DateTimeParser.parse("2/12/2019 6:00am"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 6, 0), 
-                     DateTimeParser.parse("2/12/2019 6am"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 0, 0), 
-                     DateTimeParser.parse("2/12/2019"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), 
-                     DateTimeParser.parse("2019-12-02 1800"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), 
-                     DateTimeParser.parse("2019-12-02 18:00"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 6, 0), 
-                     DateTimeParser.parse("2019-12-02 6:00am"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 6, 0), 
-                     DateTimeParser.parse("2019-12-02 6am"));
-        assertEquals(LocalDateTime.of(2019, 12, 2, 0, 0), 
-                     DateTimeParser.parse("2019-12-02"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0),
+                DateTimeParser.parse("2/12/2019 1800"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0),
+                DateTimeParser.parse("2/12/2019 18:00"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 6, 0),
+                DateTimeParser.parse("2/12/2019 6:00am"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 6, 0),
+                DateTimeParser.parse("2/12/2019 6am"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 0, 0),
+                DateTimeParser.parse("2/12/2019"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0),
+                DateTimeParser.parse("2019-12-02 1800"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0),
+                DateTimeParser.parse("2019-12-02 18:00"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 6, 0),
+                DateTimeParser.parse("2019-12-02 6:00am"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 6, 0),
+                DateTimeParser.parse("2019-12-02 6am"));
+        assertEquals(LocalDateTime.of(2019, 12, 2, 0, 0),
+                DateTimeParser.parse("2019-12-02"));
     }
 
     @Test
     void parse_timeOnlyFormats_shouldReturnCorrectLocalDateTime() {
-        // i know this is not proper unit testing because it's using LocalDate.now() but i 
+        // i know this is not proper unit testing because it's using LocalDate.now() but
+        // i
         // really don't have time to investigate how to do this properly right now so
         LocalDate today = LocalDate.now();
         LocalDateTime now = LocalDateTime.now();
@@ -50,7 +51,7 @@ class DateTimeParserTest {
             dateTime = dateTime.plusDays(1);
         }
         assertEquals(dateTime, parsedTime);
-        
+
         input = "6:00am";
         parsedTime = DateTimeParser.parse(input);
         actualTime = LocalTime.parse(input, DateTimeFormatter.ofPattern("h:mma"));

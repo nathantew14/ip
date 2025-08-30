@@ -25,15 +25,6 @@ public class Gertrude {
     private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
     private TaskList tasks = new TaskList();
 
-    /**
-     * Enum representing the result of reading the task file.
-     */
-    enum ReadTaskFileResult {
-        SUCCESS,
-        NO_FILE_FOUND,
-        ERROR_READING_FILE
-    }
-
     private Ui ui;
 
     /**
@@ -75,8 +66,9 @@ public class Gertrude {
 
         while (true) {
             String input = ui.readCommand();
-            if (input.equalsIgnoreCase("bye"))
+            if (input.equalsIgnoreCase("bye")) {
                 break;
+            }
             String response = "";
             try {
                 response = getResponse(input);
@@ -227,7 +219,8 @@ public class Gertrude {
         try {
             Event event = new Event(title, start, end);
             tasks.add(event);
-            return "Added new event: " + event.getTitle() + " (from: " + event.getStartAsString() + " to: " + event.getEndAsString()
+            return "Added new event: " + event.getTitle() + " (from: " + event.getStartAsString() + " to: "
+                    + event.getEndAsString()
                     + ")";
         } catch (InvalidDateFormatException e) {
             throw new InvalidInputException(e.getMessage());
