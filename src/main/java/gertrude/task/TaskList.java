@@ -45,4 +45,14 @@ public class TaskList {
         }
         return sb.toString().trim();
     }
+
+    public TaskList find(String keyword) {
+        List<Task> matchingTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
+                matchingTasks.add(task);
+            }
+        }
+        return new TaskList(matchingTasks);
+    }
 }

@@ -100,6 +100,9 @@ public class Gertrude {
             case REMOVE_TODO:
                 return handleRemoveTodo(input);
 
+            case FIND_TODO:
+                return handleFindTodo(input);
+
             case HELP:
                 return handleHelp(); // Handle help command
             default:
@@ -254,6 +257,22 @@ public class Gertrude {
         }
     }
 
+    private String handleFindTodo(String input) throws InvalidInputException {
+        String keyword = input.substring(CommandType.FIND_TODO.getPrefix().length()).trim();
+
+        if (keyword.isEmpty()) {
+            throw new InvalidInputException("Please provide a keyword to search for.");
+        }
+
+        TaskList foundTasks = tasks.find(keyword);
+
+        if (foundTasks.isEmpty()) {
+            return "No tasks found containing: " + keyword;
+        }
+
+        return "Here are the tasks matching your search:\n" + foundTasks.formatTasks();
+    }
+
     private void validateTaskIndex(int idx) throws InvalidInputException {
         if (idx < 0 || idx >= tasks.size()) {
             throw new InvalidInputException("Invalid task index, dear!");
@@ -291,7 +310,10 @@ public class Gertrude {
                 .append("7. remove:<task id>\n")
                 .append("   Remove a task. Example:\n")
                 .append("   remove:2\n")
-                .append("8. help\n")
+                .append("8. find:<keyword>\n")
+                .append("   Find tasks by keyword. Example:\n")
+                .append("   find:nemo\n")
+                .append("9. help\n")
                 .append("   Show this help message.");
 
         return helpMessage.toString();

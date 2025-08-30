@@ -7,7 +7,8 @@ public enum CommandType {
     COMPLETE_TODO("mark:"),
     UNCOMPLETE_TODO("unmark:"),
     HELP("help"),
-    UNKNOWN("");
+    UNKNOWN(""),
+    FIND_TODO("find:");
 
     private final String prefix;
 

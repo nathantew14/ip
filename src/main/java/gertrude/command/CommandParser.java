@@ -10,6 +10,9 @@ public class CommandParser {
             if (type == CommandType.LIST_TODOS && lowerInput.equals(type.getPrefix())) {
                 return type;
             }
+            if (type == CommandType.FIND_TODO && lowerInput.equals(type.getPrefix())) {
+                return type;
+            }
         }
         return CommandType.UNKNOWN;
     }
