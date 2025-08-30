@@ -13,6 +13,8 @@ src/main/resources/docs/
 *.iml
 bin/
 
+# generated files
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
 *data
+*gradle-wrapper.jar
