@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import gertrude.storage.LoadResult.Status;
 import gertrude.task.Task;
 
 public class Storage {
