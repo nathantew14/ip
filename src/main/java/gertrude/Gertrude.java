@@ -158,7 +158,7 @@ public class Gertrude {
         try {
             Deadline dl = new Deadline(title, deadline);
             tasks.add(dl);
-            return "Added new deadline: " + dl.getTitle() + " (by: " + dl.getDeadline() + ")";
+            return "Added new deadline: " + dl.getTitle() + " (by: " + dl.getDeadlineAsString() + ")";
         } catch (InvalidDateFormatException e) {
             throw new InvalidInputException(e.getMessage());
         }
@@ -176,7 +176,7 @@ public class Gertrude {
         try {
             Event event = new Event(title, start, end);
             tasks.add(event);
-            return "Added new event: " + event.getTitle() + " (from: " + event.getStart() + " to: " + event.getEnd()
+            return "Added new event: " + event.getTitle() + " (from: " + event.getStartAsString() + " to: " + event.getEndAsString()
                     + ")";
         } catch (InvalidDateFormatException e) {
             throw new InvalidInputException(e.getMessage());
