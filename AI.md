@@ -54,3 +54,10 @@ Refactoring step-by-step mostly worked well, although the Copilot GPT struggled 
 
 # A-Packages
 GPT super quickly refactored most things into packages, and I just had to mop up the leftovers.
+
+# A-JUnit
+GPT was able to generate tests for DateTimeParser mostly correctly, I just had to add some handling for the part that uses now(), which is a bad idea that I don't have time to fix right now.
+
+The generated tests for the saved Tasks parser reminded me that Event and Deadline were not returning LocalDateTime objects, but rather strings. Refactor that and re-prompt to write the correct tests.
+
+Weird that the first test run seemed to miss the "T" in the ISO format input... idk what happened there and I have no time to investigate.

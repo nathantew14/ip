@@ -1,7 +1,6 @@
 package gertrude.task;
 public abstract class Task {
     protected String title;
-    protected boolean completed = false;
 
     public Task(String title) {
         this.title = title;
