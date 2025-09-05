@@ -37,6 +37,8 @@ public class MainWindow extends AnchorPane {
     /** Injects the Gertrude instance */
     public void setGertrude(Gertrude g) {
         gertrude = g;
+        String welcomeMessage = gertrude.init();
+        addGertrudeDialog(welcomeMessage);
     }
 
     /**
@@ -49,8 +51,12 @@ public class MainWindow extends AnchorPane {
         String input = userInput.getText();
         String response = gertrude.getErrorHandledResponse(input);
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getGertrudeDialog(response, gertrudeImage));
+                DialogBox.getUserDialog(input, userImage));
+        addGertrudeDialog(response);
         userInput.clear();
+    }
+
+    private void addGertrudeDialog(String text) {
+        dialogContainer.getChildren().add(DialogBox.getGertrudeDialog(text, gertrudeImage));
     }
 }

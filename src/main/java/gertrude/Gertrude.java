@@ -24,9 +24,9 @@ import gertrude.exceptions.InvalidDateFormatException;
 public class Gertrude {
     private final String DATA_FILE_PATH; // Relative path for the data file
     private TaskList tasks = new TaskList();
+    private Storage storage;
 
     private Ui ui;
-
 
     /**
      * Constructs a Gertrude instance with the specified data file path.
@@ -36,9 +36,11 @@ public class Gertrude {
     public Gertrude(String[] args) {
         this("data/gertrude.txt");
     }
+
     public Gertrude() {
         this("data/gertrude.txt");
     }
+
     public Gertrude(String filePath) {
         DATA_FILE_PATH = filePath;
     }
@@ -52,21 +54,10 @@ public class Gertrude {
         new Gertrude().run();
     }
 
-    /**
-     * Generates a response for the user's chat message.
-     */
-    public String getPlaceholderResponse(String input) {
-        return "Gertrude heard: " + input;
-    }
-
-    /**
-     * Runs the main application loop.
-     */
-    private void run() {
-        ui = new Ui();
+    public String init() {
         String welcomeMessage;
 
-        Storage storage = new Storage(DATA_FILE_PATH);
+        storage = new Storage(DATA_FILE_PATH);
         LoadResult loadResult = storage.loadTasksFromFile();
 
         switch (loadResult.getStatus()) {
@@ -84,6 +75,16 @@ public class Gertrude {
             default:
                 welcomeMessage = "";
         }
+        return welcomeMessage;
+    }
+
+    /**
+     * Runs the main application loop.
+     */
+    private void run() {
+        String welcomeMessage = init();
+
+        ui = new Ui();
 
         ui.showWelcomeMessage(welcomeMessage);
 
@@ -152,7 +153,8 @@ public class Gertrude {
      * Processes user input and returns a response, handling exceptions.
      *
      * @param input The user input.
-     * @return The response to the user input, or an error message if an exception occurs.
+     * @return The response to the user input, or an error message if an exception
+     *         occurs.
      */
     public String getErrorHandledResponse(String input) {
         try {
