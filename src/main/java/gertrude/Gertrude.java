@@ -22,10 +22,26 @@ import gertrude.exceptions.InvalidDateFormatException;
  * Handles user input, task management, and file storage.
  */
 public class Gertrude {
-    private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
+    private final String DATA_FILE_PATH; // Relative path for the data file
     private TaskList tasks = new TaskList();
 
     private Ui ui;
+
+
+    /**
+     * Constructs a Gertrude instance with the specified data file path.
+     *
+     * @param filePath The path to the data file for storing tasks.
+     */
+    public Gertrude(String[] args) {
+        this("data/gertrude.txt");
+    }
+    public Gertrude() {
+        this("data/gertrude.txt");
+    }
+    public Gertrude(String filePath) {
+        DATA_FILE_PATH = filePath;
+    }
 
     /**
      * The main entry point for the application.
@@ -34,6 +50,13 @@ public class Gertrude {
      */
     public static void main(String[] args) {
         new Gertrude().run();
+    }
+
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getPlaceholderResponse(String input) {
+        return "Gertrude heard: " + input;
     }
 
     /**
@@ -122,6 +145,20 @@ public class Gertrude {
                 return handleHelp(); // Handle help command
             default:
                 return handleHelp();
+        }
+    }
+
+    /**
+     * Processes user input and returns a response, handling exceptions.
+     *
+     * @param input The user input.
+     * @return The response to the user input, or an error message if an exception occurs.
+     */
+    public String getErrorHandledResponse(String input) {
+        try {
+            return getResponse(input);
+        } catch (InvalidInputException | IllegalArgumentException e) {
+            return e.getMessage();
         }
     }
 

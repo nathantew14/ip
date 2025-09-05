@@ -1,6 +1,8 @@
 package gertrude.gui;
 
+import gertrude.Gertrude;
 import gertrude.gui.components.DialogBox;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,6 +23,7 @@ public class Main extends Application {
     private Scene scene;
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Gertrude gertrude = new Gertrude();
 
     @Override
     public void start(Stage stage) {
@@ -40,7 +43,7 @@ public class Main extends Application {
 
         //Formatting the window to look as expected
 
-        stage.setTitle("Duke");
+        stage.setTitle("Gertrude");
         stage.setResizable(false);
         stage.setMinHeight(600.0);
         stage.setMinWidth(400.0);
@@ -76,7 +79,7 @@ public class Main extends Application {
         userInput.setOnAction((event) -> {
             handleUserInput();
         });
-        
+
         //Scroll down to the end every time dialogContainer's height changes.
         dialogContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
 
@@ -91,7 +94,12 @@ public class Main extends Application {
      * the dialog container. Clears the user input after processing.
      */
     private void handleUserInput() {
-        dialogContainer.getChildren().addAll(new DialogBox(userInput.getText(), userImage));
+        String userText = userInput.getText();
+        String gertrudeText = gertrude.getErrorHandledResponse(userInput.getText());
+        dialogContainer.getChildren().addAll(
+                new DialogBox(userText, userImage),
+                new DialogBox(gertrudeText, dukeImage)
+        );
         userInput.clear();
     }
 }
