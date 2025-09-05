@@ -54,7 +54,7 @@ test {
 }
 
 application {
-    mainClass.set("gertrude.Gertrude")
+   mainClass.set("Launcher")
 }
 
 shadowJar {
