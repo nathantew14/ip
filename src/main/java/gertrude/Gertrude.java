@@ -72,7 +72,7 @@ public class Gertrude {
             String response = "";
             try {
                 response = getResponse(input);
-            } catch (InvalidInputException e) {
+            } catch (InvalidInputException | IllegalArgumentException e) {
                 response = e.getMessage();
             }
 
