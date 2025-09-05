@@ -22,10 +22,28 @@ import gertrude.exceptions.InvalidDateFormatException;
  * Handles user input, task management, and file storage.
  */
 public class Gertrude {
-    private final String DATA_FILE_PATH = "./data/gertrude.txt"; // Relative path for the data file
+    private final String DATA_FILE_PATH; // Relative path for the data file
     private TaskList tasks = new TaskList();
+    private Storage storage;
 
     private Ui ui;
+
+    /**
+     * Constructs a Gertrude instance with the specified data file path.
+     *
+     * @param filePath The path to the data file for storing tasks.
+     */
+    public Gertrude(String[] args) {
+        this("data/gertrude.txt");
+    }
+
+    public Gertrude() {
+        this("data/gertrude.txt");
+    }
+
+    public Gertrude(String filePath) {
+        DATA_FILE_PATH = filePath;
+    }
 
     /**
      * The main entry point for the application.
@@ -36,14 +54,10 @@ public class Gertrude {
         new Gertrude().run();
     }
 
-    /**
-     * Runs the main application loop.
-     */
-    private void run() {
-        ui = new Ui();
+    public String init() {
         String welcomeMessage;
 
-        Storage storage = new Storage(DATA_FILE_PATH);
+        storage = new Storage(DATA_FILE_PATH);
         LoadResult loadResult = storage.loadTasksFromFile();
 
         switch (loadResult.getStatus()) {
@@ -61,6 +75,16 @@ public class Gertrude {
             default:
                 welcomeMessage = "";
         }
+        return welcomeMessage;
+    }
+
+    /**
+     * Runs the main application loop.
+     */
+    private void run() {
+        String welcomeMessage = init();
+
+        ui = new Ui();
 
         ui.showWelcomeMessage(welcomeMessage);
 
@@ -122,6 +146,21 @@ public class Gertrude {
                 return handleHelp(); // Handle help command
             default:
                 return handleHelp();
+        }
+    }
+
+    /**
+     * Processes user input and returns a response, handling exceptions.
+     *
+     * @param input The user input.
+     * @return The response to the user input, or an error message if an exception
+     *         occurs.
+     */
+    public String getErrorHandledResponse(String input) {
+        try {
+            return getResponse(input);
+        } catch (InvalidInputException | IllegalArgumentException e) {
+            return e.getMessage();
         }
     }
 
