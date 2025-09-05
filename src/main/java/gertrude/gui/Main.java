@@ -97,8 +97,8 @@ public class Main extends Application {
         String userText = userInput.getText();
         String gertrudeText = gertrude.getErrorHandledResponse(userInput.getText());
         dialogContainer.getChildren().addAll(
-                new DialogBox(userText, userImage),
-                new DialogBox(gertrudeText, dukeImage)
+                DialogBox.getUserDialog(userText, userImage),
+                DialogBox.getGertrudeDialog(gertrudeText, dukeImage)
         );
         userInput.clear();
     }
