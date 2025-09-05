@@ -33,7 +33,7 @@ public class Gertrude {
      *
      * @param filePath The path to the data file for storing tasks.
      */
-    public Gertrude(String[] args) {
+    public Gertrude(String... args) {
         this("data/gertrude.txt");
     }
 
@@ -50,7 +50,7 @@ public class Gertrude {
      *
      * @param args Command-line arguments (not used).
      */
-    public static void main(String[] args) {
+    public static void main(String... args) {
         new Gertrude().run();
     }
 
