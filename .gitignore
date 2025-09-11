@@ -17,4 +17,3 @@ bin/
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
 *data
-*gradle-wrapper.jar
