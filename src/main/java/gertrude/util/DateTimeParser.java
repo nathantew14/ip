@@ -1,10 +1,12 @@
 package gertrude.util;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAdjusters;
 
 /**
  * Utility class for parsing and formatting date and time strings.
@@ -16,7 +18,8 @@ public class DateTimeParser {
     public static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
 
     // Flexible input patterns
-    private static final String[] DATE_TIME_PATTERNS = { "d/M/yyyy HHmm", // Example: 2/12/2019 1800
+    private static final String[] DATE_TIME_PATTERNS = {
+            "d/M/yyyy HHmm", // Example: 2/12/2019 1800
             "d/M/yyyy HH:mm", // Example: 2/12/2019 18:00
             "d/M/yyyy h:mma", // Example: 2/12/2019 6:00am
             "d/M/yyyy ha", // Example: 2/12/2019 6am
@@ -29,7 +32,8 @@ public class DateTimeParser {
             "HHmm", // Example: 1800
             "HH:mm", // Example: 18:00
             "h:mma", // Example: 6:00am
-            "ha" // Example: 6am
+            "ha", // Example: 6am
+            "E" // Example: Tue
     };
 
     /**
@@ -51,26 +55,32 @@ public class DateTimeParser {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
                 String lowerPattern = pattern.toLowerCase();
-                if (lowerPattern.contains("h")) { // has time component
-                    if (!lowerPattern.contains("d")) {
-                        // Handle time-only formats
-                        LocalTime time = LocalTime.parse(input, formatter);
-                        LocalDate today = LocalDate.now();
-                        LocalDateTime dateTime = today.atTime(time);
-                        // If the time has already passed today, use the next day
-                        if (dateTime.isBefore(LocalDateTime.now())) {
-                            dateTime = dateTime.plusDays(1);
-                        }
-                        return dateTime;
-                    } else {
-                        return LocalDateTime.parse(input, formatter);
-                    }
-                } else {
+                if (lowerPattern.equals("e")) {
+                    // Handle day-of-week-only format
+                    DayOfWeek targetDay = DayOfWeek.valueOf(input.toUpperCase());
+                    LocalDate today = LocalDate.now();
+                    LocalDate nextOrSame = today.with(TemporalAdjusters.nextOrSame(targetDay));
+                    return nextOrSame.atTime(8, 0); // default to 8 AM
+                }
+                if (!lowerPattern.contains("h")) {
                     LocalDate date = LocalDate.parse(input, formatter);
-                    return date.atStartOfDay();
+                    return date.atTime(8, 0); // default to 8 AM
+                }
+                if (!lowerPattern.contains("d")) {
+                    // Handle time-only formats
+                    LocalTime time = LocalTime.parse(input, formatter);
+                    LocalDate today = LocalDate.now();
+                    LocalDateTime dateTime = today.atTime(time);
+                    // If the time has already passed today, use the next day
+                    if (dateTime.isBefore(LocalDateTime.now())) {
+                        dateTime = dateTime.plusDays(1);
+                    }
+                    return dateTime;
+                } else {
+                    return LocalDateTime.parse(input, formatter);
                 }
             } catch (DateTimeParseException ignored) {
-                // allow the outer throw to handle the case when the input completely cannot be parsed
+                // on error, try next pattern
             }
         }
         throw new IllegalArgumentException(
