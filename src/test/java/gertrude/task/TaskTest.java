@@ -2,6 +2,8 @@ package gertrude.task;
 
 import org.junit.jupiter.api.Test;
 
+import gertrude.exceptions.SaveFileBadLineException;
+
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TaskTest {
 
     @Test
-    void fromFileFormat_validTodoFormat_shouldReturnTodo() {
+    void fromFileFormat_validTodoFormat_shouldReturnTodo() throws SaveFileBadLineException {
         String savedTodo = "T | 1 | Read book";
         Task task = Task.fromFileFormat(savedTodo);
 
@@ -20,7 +22,7 @@ class TaskTest {
     }
 
     @Test
-    void fromFileFormat_validDeadlineFormat_shouldReturnDeadline() {
+    void fromFileFormat_validDeadlineFormat_shouldReturnDeadline() throws SaveFileBadLineException {
         String savedDeadline = "D | 0 | Submit assignment | 2023-10-15T00:00";
         Task task = Task.fromFileFormat(savedDeadline);
 
@@ -32,7 +34,7 @@ class TaskTest {
     }
 
     @Test
-    void fromFileFormat_validEventFormat_shouldReturnEvent() {
+    void fromFileFormat_validEventFormat_shouldReturnEvent() throws SaveFileBadLineException {
         String savedEvent = "E | 1 | Team meeting | 2023-10-15T10:00 | 2023-10-15T12:00";
         Task task = Task.fromFileFormat(savedEvent);
 
@@ -45,7 +47,7 @@ class TaskTest {
     }
 
     @Test
-    void fromFileFormat_invalidFormat_shouldReturnNull() {
+    void fromFileFormat_invalidFormat_shouldReturnNull() throws SaveFileBadLineException {
         String invalidFormat = "X | 1 | Invalid task";
         Task task = Task.fromFileFormat(invalidFormat);
 
@@ -53,7 +55,7 @@ class TaskTest {
     }
 
     @Test
-    void fromFileFormat_corruptedData_shouldReturnNull() {
+    void fromFileFormat_corruptedData_shouldReturnNull() throws SaveFileBadLineException {
         String corruptedData = "D | 1 | Missing deadline";
         Task task = Task.fromFileFormat(corruptedData);
 

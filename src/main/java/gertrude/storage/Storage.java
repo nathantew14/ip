@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import gertrude.exceptions.SaveFileBadLineException;
 import gertrude.task.Task;
 
 public class Storage {
@@ -26,17 +27,25 @@ public class Storage {
         }
 
         List<Task> tasks = new ArrayList<>();
+        List<String> badLines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                Task task = Task.fromFileFormat(line);
-                if (task != null) {
-                    tasks.add(task);
+                try {
+                    Task task = Task.fromFileFormat(line);
+                    if (task != null) {
+                        tasks.add(task);
+                    }
+                } catch (SaveFileBadLineException e) {
+                    badLines.add(line);
                 }
+            }
+            if (!badLines.isEmpty()) {
+                return new LoadResult(ReadTaskFileOutcome.FILE_BAD_LINES, tasks, badLines);
             }
             return new LoadResult(ReadTaskFileOutcome.SUCCESS, tasks);
         } catch (IOException e) {
-            return new LoadResult(ReadTaskFileOutcome.ERROR_READING_FILE, new ArrayList<>());
+            return new LoadResult(ReadTaskFileOutcome.FILE_UNREADABLE, new ArrayList<>());
         }
     }
 

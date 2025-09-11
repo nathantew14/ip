@@ -2,7 +2,7 @@ package gertrude;
 
 import java.io.*;
 import gertrude.util.DateTimeParser;
-import gertrude.util.Ui;
+import gertrude.util.CliUi;
 import gertrude.command.CommandParser;
 import gertrude.command.CommandType;
 import gertrude.command.TagType;
@@ -13,36 +13,32 @@ import gertrude.task.Event;
 import gertrude.task.Task;
 import gertrude.task.CompletableTask;
 import gertrude.exceptions.InvalidInputException;
+import gertrude.interactions.GertrudeResponse;
 import gertrude.storage.LoadResult;
 import gertrude.storage.Storage;
 import gertrude.exceptions.InvalidDateFormatException;
 
 /**
- * The main class for the Gertrude chatbot application.
- * Handles user input, task management, and file storage.
+ * The main class for the Gertrude chatbot application. Handles user input, task
+ * management, and file storage.
  */
 public class Gertrude {
-    private final String DATA_FILE_PATH; // Relative path for the data file
-    private TaskList tasks = new TaskList();
-    private Storage storage;
-
-    private Ui ui;
+    private final String DATA_FILE_PATH;
+    private TaskList tasks = new TaskList(); // TaskList is initialised as it is always used
+    private Storage storage; // File path is not yet available to initialise storage
+    private CliUi cliUi; // command line interface is not always used
 
     /**
      * Constructs a Gertrude instance with the specified data file path.
      *
      * @param filePath The path to the data file for storing tasks.
      */
-    public Gertrude(String... args) {
-        this("data/gertrude.txt");
+    public Gertrude(String filePath, String... args) {
+        DATA_FILE_PATH = filePath;
     }
 
     public Gertrude() {
         this("data/gertrude.txt");
-    }
-
-    public Gertrude(String filePath) {
-        DATA_FILE_PATH = filePath;
     }
 
     /**
@@ -63,19 +59,29 @@ public class Gertrude {
         LoadResult loadResult = storage.loadTasksFromFile();
 
         switch (loadResult.getStatus()) {
-            case SUCCESS:
-                tasks = new TaskList(loadResult.getTasks());
-                welcomeMessage = "Welcome back, dear! I've loaded your tasks from the last session.";
-                break;
-            case NO_FILE_FOUND:
-                welcomeMessage = "Hello, dear! It seems like this is your first time here.\n"
-                        + "I'm Gertrude, your friendly AI chatbot. Let's get started!";
-                break;
-            case ERROR_READING_FILE:
-                welcomeMessage = "Oh no, dear! I couldn't read your tasks file. Starting fresh for now.";
-                break;
-            default:
-                welcomeMessage = "";
+        case SUCCESS:
+            tasks = new TaskList(loadResult.getTasks());
+            welcomeMessage = "Welcome back, dear! I've loaded your tasks from the last session.";
+            break;
+        case NO_FILE_FOUND:
+            welcomeMessage = "Hello, dear! It seems like this is your first time here.\n"
+                    + "I'm Gertrude, your friendly AI chatbot. Let's get started!";
+            break;
+        case FILE_BAD_LINES:
+            tasks = new TaskList(loadResult.getTasks());
+            StringBuilder badLinesMessage = new StringBuilder();
+            badLinesMessage.append("Oh dear, I found some issues while reading your tasks file.\n");
+            badLinesMessage.append("The following lines were skipped due to errors:\n");
+            for (String badLine : loadResult.getBadLines()) {
+                badLinesMessage.append("- ").append(badLine).append("\n");
+            }
+            welcomeMessage = badLinesMessage.toString();
+            break;
+        case FILE_UNREADABLE:
+            welcomeMessage = "Oh no, dear! I couldn't read your tasks file. Starting fresh for now.";
+            break;
+        default:
+            welcomeMessage = "";
         }
         return welcomeMessage;
     }
@@ -85,35 +91,20 @@ public class Gertrude {
      */
     private void run() {
         String welcomeMessage = init();
-
         assert welcomeMessage != null && !welcomeMessage.isEmpty() : "Missing welcome message";
 
-        ui = new Ui();
-
-        ui.showWelcomeMessage(welcomeMessage);
+        cliUi = new CliUi();
+        cliUi.showWelcomeMessage(welcomeMessage);
 
         while (true) {
-            String input = ui.readCommand();
-            if (input.equalsIgnoreCase("bye")) {
+            String input = cliUi.readCommand();
+            GertrudeResponse response = getResponse(input);
+            cliUi.showResponse(response.getMessage());
+            if (response.isExit()) {
                 break;
             }
-            String response = "";
-            try {
-                response = getResponse(input);
-            } catch (InvalidInputException | IllegalArgumentException e) {
-                response = e.getMessage();
-            }
-
-            ui.showResponse(response);
-            try {
-                storage.saveTasksToFile(tasks.getAllTasks());
-            } catch (IOException e) {
-                ui.showResponse("Oops! I couldn't save your tasks, dear.");
-            }
         }
-
-        ui.showGoodbyeMessage();
-        ui.close();
+        cliUi.close();
     }
 
     /**
@@ -121,51 +112,56 @@ public class Gertrude {
      *
      * @param input The user input.
      * @return The response to the user input.
-     * @throws InvalidInputException    If the input is invalid.
-     * @throws IllegalArgumentException If an illegal argument is encountered.
      */
-    private String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
+    public GertrudeResponse getResponse(String input) {
+        if (input.equalsIgnoreCase("bye")) {
+            return new GertrudeResponse("Goodbye! Have a great day!", true);
+        }
         CommandType commandType = CommandParser.parseCommand(input);
-
-        switch (commandType) {
+        String response;
+        try {
+            switch (commandType) {
             case ADD_TODO:
-                return handleAddTodo(input);
+                response = handleAddTodo(input);
+                break;
 
             case LIST_TODOS:
-                return handleListTodos();
+                response = handleListTodos();
+                break;
 
             case COMPLETE_TODO:
-                return handleCompleteTodo(input);
+                response = handleCompleteTodo(input);
+                break;
 
             case UNCOMPLETE_TODO:
-                return handleUncompleteTodo(input);
+                response = handleUncompleteTodo(input);
+                break;
 
             case REMOVE_TODO:
-                return handleRemoveTodo(input);
+                response = handleRemoveTodo(input);
+                break;
 
             case FIND_TODO:
-                return handleFindTodo(input);
+                response = handleFindTodo(input);
+                break;
 
             case HELP:
-                return handleHelp(); // Handle help command
-            default:
-                return handleHelp();
-        }
-    }
+                response = handleHelp(); // Handle help command
+                break;
 
-    /**
-     * Processes user input and returns a response, handling exceptions.
-     *
-     * @param input The user input.
-     * @return The response to the user input, or an error message if an exception
-     *         occurs.
-     */
-    public String getErrorHandledResponse(String input) {
-        try {
-            return getResponse(input);
+            default:
+                response = handleHelp();
+            }
         } catch (InvalidInputException | IllegalArgumentException e) {
-            return e.getMessage();
+            return new GertrudeResponse(e.getMessage(), false);
         }
+
+        try {
+            storage.saveTasksToFile(tasks.getAllTasks());
+        } catch (IOException e) {
+            response = "(Oops! I couldn't save your tasks: " + e.getMessage() + ")\n" + response;
+        }
+        return new GertrudeResponse(response, false);
     }
 
     /**
@@ -188,9 +184,8 @@ public class Gertrude {
         int endIndex = content.indexOf(TagType.END_TAG.getTag());
 
         // Check for invalid combinations
-        if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) ||
-                (startIndex != -1 && endIndex == -1) ||
-                (endIndex != -1 && startIndex == -1)) {
+        if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) || (startIndex != -1 && endIndex == -1)
+                || (endIndex != -1 && startIndex == -1)) {
             throw new InvalidInputException(
                     "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
         }
@@ -263,8 +258,7 @@ public class Gertrude {
             Event event = new Event(title, start, end);
             tasks.add(event);
             return "Added new event: " + event.getTitle() + " (from: " + event.getStartAsString() + " to: "
-                    + event.getEndAsString()
-                    + ")";
+                    + event.getEndAsString() + ")";
         } catch (InvalidDateFormatException e) {
             throw new InvalidInputException(e.getMessage());
         }
@@ -402,15 +396,10 @@ public class Gertrude {
      */
     private String handleHelp() {
         StringBuilder helpMessage = new StringBuilder("Here are the available commands:\n")
-                .append("1. add:<description>\n")
-                .append("   Add a todo. Example:\n")
-                .append("   add:find nemo\n")
-                .append("2. add:<description> /by <deadline>\n")
-                .append("   Add a deadline. Examples:\n")
-                .append("   add:finish iP /by 2/12/2019 1800\n")
-                .append("   add:finish iP /by 2/12/2019 6:00am\n")
-                .append("   add:finish iP /by 2019-12-02 18:00\n")
-                .append("   add:finish iP /by 2019-12-02\n")
+                .append("1. add:<description>\n").append("   Add a todo. Example:\n").append("   add:find nemo\n")
+                .append("2. add:<description> /by <deadline>\n").append("   Add a deadline. Examples:\n")
+                .append("   add:finish iP /by 2/12/2019 1800\n").append("   add:finish iP /by 2/12/2019 6:00am\n")
+                .append("   add:finish iP /by 2019-12-02 18:00\n").append("   add:finish iP /by 2019-12-02\n")
                 .append("   Supported date formats:\n");
 
         for (String format : DateTimeParser.getAvailableFormats()) {
@@ -419,23 +408,13 @@ public class Gertrude {
 
         helpMessage.append("3. add:<description> /start <start time> /end <end time>\n")
                 .append("   Add an event with a start and end time. Example:\n")
-                .append("   add:exco meeting /start 2/12/2019 5:00pm /end 2/12/2019 6:00pm\n")
-                .append("4. list\n")
-                .append("   List all tasks.\n")
-                .append("5. mark:<task id>\n")
-                .append("   Mark a task as completed. Example:\n")
-                .append("   mark:2\n")
-                .append("6. unmark:<task id>\n")
-                .append("   Unmark a task as not completed. Example:\n")
-                .append("   unmark:2\n")
-                .append("7. remove:<task id>\n")
-                .append("   Remove a task. Example:\n")
-                .append("   remove:2\n")
-                .append("8. find:<keyword>\n")
-                .append("   Find tasks by keyword. Example:\n")
-                .append("   find:nemo\n")
-                .append("9. help\n")
-                .append("   Show this help message.");
+                .append("   add:exco meeting /start 2/12/2019 5:00pm /end 2/12/2019 6:00pm\n").append("4. list\n")
+                .append("   List all tasks.\n").append("5. mark:<task id>\n")
+                .append("   Mark a task as completed. Example:\n").append("   mark:2\n").append("6. unmark:<task id>\n")
+                .append("   Unmark a task as not completed. Example:\n").append("   unmark:2\n")
+                .append("7. remove:<task id>\n").append("   Remove a task. Example:\n").append("   remove:2\n")
+                .append("8. find:<keyword>\n").append("   Find tasks by keyword. Example:\n").append("   find:nemo\n")
+                .append("9. help\n").append("   Show this help message.");
 
         return helpMessage.toString();
     }

@@ -4,7 +4,7 @@ package gertrude.task;
  * Represents a task that can be marked as completed or not completed.
  */
 public class CompletableTask extends Task {
-    private boolean completed = false;
+    private boolean isCompleted = false;
 
     /**
      * Constructs a CompletableTask with the specified title.
@@ -29,21 +29,21 @@ public class CompletableTask extends Task {
      * Toggles the completion status of the task.
      */
     public void toggleCompleted() {
-        completed = !completed;
+        isCompleted = !isCompleted;
     }
 
     /**
      * Marks the task as completed.
      */
     public void setCompleted() {
-        completed = true;
+        isCompleted = true;
     }
 
     /**
      * Marks the task as not completed.
      */
     public void setNotCompleted() {
-        completed = false;
+        isCompleted = false;
     }
 
     /**
@@ -52,7 +52,7 @@ public class CompletableTask extends Task {
      * @return True if the task is completed, false otherwise.
      */
     public boolean isCompleted() {
-        return completed;
+        return isCompleted;
     }
 
     /**
@@ -81,6 +81,6 @@ public class CompletableTask extends Task {
      */
     @Override
     public String toString() {
-        return String.format("[%s] %s %s", getTaskType(), completed ? "[X]" : "[ ]", title);
+        return String.format("[%s] %s %s", getTaskType(), isCompleted ? "[X]" : "[ ]", title);
     }
 }
