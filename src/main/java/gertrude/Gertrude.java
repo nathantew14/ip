@@ -64,7 +64,17 @@ public class Gertrude {
             welcomeMessage = "Hello, dear! It seems like this is your first time here.\n"
                     + "I'm Gertrude, your friendly AI chatbot. Let's get started!";
             break;
-        case ERROR_READING_FILE:
+        case FILE_BAD_LINES:
+            tasks = new TaskList(loadResult.getTasks());
+            StringBuilder badLinesMessage = new StringBuilder();
+            badLinesMessage.append("Oh dear, I found some issues while reading your tasks file.\n");
+            badLinesMessage.append("The following lines were skipped due to errors:\n");
+            for (String badLine : loadResult.getBadLines()) {
+                badLinesMessage.append("- ").append(badLine).append("\n");
+            }
+            welcomeMessage = badLinesMessage.toString();
+            break;
+        case FILE_UNREADABLE:
             welcomeMessage = "Oh no, dear! I couldn't read your tasks file. Starting fresh for now.";
             break;
         default:

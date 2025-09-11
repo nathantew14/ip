@@ -1,5 +1,7 @@
 package gertrude.task;
 
+import gertrude.exceptions.SaveFileBadLineException;
+
 /**
  * Represents a generic task with a title and completion status.
  */
@@ -63,7 +65,7 @@ public abstract class Task {
      * @param line The string representation of the task from the file.
      * @return The parsed Task object.
      */
-    public static Task fromFileFormat(String line) {
+    public static Task fromFileFormat(String line) throws SaveFileBadLineException {
         try {
             String[] parts = line.split(" \\| ");
             String type = parts[0];
@@ -93,10 +95,10 @@ public abstract class Task {
                 }
                 return event;
             default:
-                return null;
+                throw new SaveFileBadLineException(null);
             }
         } catch (Exception e) {
-            return null; // Handle corrupted data gracefully
+            throw new SaveFileBadLineException(null);
         }
     }
 

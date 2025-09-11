@@ -6,5 +6,6 @@ package gertrude.storage;
 public enum ReadTaskFileOutcome {
     SUCCESS,
     NO_FILE_FOUND,
-    ERROR_READING_FILE
+    FILE_BAD_LINES,
+    FILE_UNREADABLE,
 }
