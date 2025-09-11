@@ -1,14 +1,8 @@
 package gertrude.command;
 
 public enum CommandType {
-    ADD_TODO("add:"),
-    REMOVE_TODO("remove:"),
-    LIST_TODOS("list"),
-    COMPLETE_TODO("mark:"),
-    UNCOMPLETE_TODO("unmark:"),
-    HELP("help"),
-    UNKNOWN(""),
-    FIND_TODO("find:");
+    ADD_TODO("add:"), REMOVE_TODO("remove:"), LIST_TODOS("list"), COMPLETE_TODO("mark:"), UNCOMPLETE_TODO("unmark:"),
+    HELP("help"), UNKNOWN(""), FIND_TODO("find:");
 
     private final String prefix;
 

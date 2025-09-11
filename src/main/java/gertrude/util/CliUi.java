@@ -10,11 +10,11 @@ public class CliUi {
     }
 
     public void showWelcomeMessage(String message) {
-        System.out.println("\n" + message + "\n"
-                + "-------------------------------------------------------------------------\n"
-                + "If you need help, advice, or just a little chat, I'm always here for you.\n"
-                + "Now, what can I do for you today, sweetheart?\n"
-                + "-------------------------------------------------------------------------");
+        System.out.println(
+                "\n" + message + "\n" + "-------------------------------------------------------------------------\n"
+                        + "If you need help, advice, or just a little chat, I'm always here for you.\n"
+                        + "Now, what can I do for you today, sweetheart?\n"
+                        + "-------------------------------------------------------------------------");
     }
 
     public void showGoodbyeMessage() {
