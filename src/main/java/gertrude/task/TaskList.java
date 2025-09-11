@@ -41,9 +41,7 @@ public class TaskList {
     }
 
     public String formatTasks() {
-        return IntStream.range(0, tasks.size())
-            .mapToObj(i -> tasks.get(i).format(i))
-            .collect(Collectors.joining("\n"));
+        return IntStream.range(0, tasks.size()).mapToObj(i -> tasks.get(i).format(i)).collect(Collectors.joining("\n"));
     }
 
     public TaskList find(String keyword) {

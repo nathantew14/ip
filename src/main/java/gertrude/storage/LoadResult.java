@@ -15,6 +15,7 @@ public class LoadResult {
         this.tasks = tasks;
         this.badLines = badLines;
     }
+
     public LoadResult(ReadTaskFileOutcome status, List<Task> tasks) {
         this.status = status;
         this.tasks = tasks;

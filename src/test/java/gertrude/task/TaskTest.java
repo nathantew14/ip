@@ -47,18 +47,18 @@ class TaskTest {
     }
 
     @Test
-    void fromFileFormat_invalidFormat_shouldReturnNull() throws SaveFileBadLineException {
+    void fromFileFormat_invalidFormat_shouldThrowError() throws SaveFileBadLineException {
         String invalidFormat = "X | 1 | Invalid task";
-        Task task = Task.fromFileFormat(invalidFormat);
-
-        assertNull(task);
+        assertThrows(SaveFileBadLineException.class, () -> {
+            Task.fromFileFormat(invalidFormat);
+        });
     }
 
     @Test
-    void fromFileFormat_corruptedData_shouldReturnNull() throws SaveFileBadLineException {
+    void fromFileFormat_corruptedData_shouldThrowError() throws SaveFileBadLineException {
         String corruptedData = "D | 1 | Missing deadline";
-        Task task = Task.fromFileFormat(corruptedData);
-
-        assertNull(task);
+        assertThrows(SaveFileBadLineException.class, () -> {
+            Task.fromFileFormat(corruptedData);
+        });
     }
 }
