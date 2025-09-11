@@ -2,7 +2,7 @@ package gertrude;
 
 import java.io.*;
 import gertrude.util.DateTimeParser;
-import gertrude.util.Ui;
+import gertrude.util.CliUi;
 import gertrude.command.CommandParser;
 import gertrude.command.CommandType;
 import gertrude.command.TagType;
@@ -22,27 +22,22 @@ import gertrude.exceptions.InvalidDateFormatException;
  * management, and file storage.
  */
 public class Gertrude {
-    private final String DATA_FILE_PATH; // Relative path for the data file
-    private TaskList tasks = new TaskList();
-    private Storage storage;
-
-    private Ui ui;
+    private final String DATA_FILE_PATH;
+    private TaskList tasks = new TaskList(); // TaskList is initialised as it is always used
+    private Storage storage; // File path is not yet available to initialise storage
+    private CliUi cliUi; // command line interface is not always used
 
     /**
      * Constructs a Gertrude instance with the specified data file path.
      *
      * @param filePath The path to the data file for storing tasks.
      */
-    public Gertrude(String... args) {
-        this("data/gertrude.txt");
+    public Gertrude(String filePath, String... args) {
+        DATA_FILE_PATH = filePath;
     }
 
     public Gertrude() {
         this("data/gertrude.txt");
-    }
-
-    public Gertrude(String filePath) {
-        DATA_FILE_PATH = filePath;
     }
 
     /**
@@ -84,12 +79,11 @@ public class Gertrude {
     private void run() {
         String welcomeMessage = init();
 
-        ui = new Ui();
-
-        ui.showWelcomeMessage(welcomeMessage);
+        cliUi = new CliUi();
+        cliUi.showWelcomeMessage(welcomeMessage);
 
         while (true) {
-            String input = ui.readCommand();
+            String input = cliUi.readCommand();
             if (input.equalsIgnoreCase("bye")) {
                 break;
             }
@@ -100,16 +94,16 @@ public class Gertrude {
                 response = e.getMessage();
             }
 
-            ui.showResponse(response);
+            cliUi.showResponse(response);
             try {
                 storage.saveTasksToFile(tasks.getAllTasks());
             } catch (IOException e) {
-                ui.showResponse("Oops! I couldn't save your tasks, dear.");
+                cliUi.showResponse("Oops! I couldn't save your tasks, dear.");
             }
         }
 
-        ui.showGoodbyeMessage();
-        ui.close();
+        cliUi.showGoodbyeMessage();
+        cliUi.close();
     }
 
     /**
