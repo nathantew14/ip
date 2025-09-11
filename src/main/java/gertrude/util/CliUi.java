@@ -2,10 +2,10 @@ package gertrude.util;
 
 import java.util.Scanner;
 
-public class Ui {
+public class CliUi {
     private final Scanner scanner;
 
-    public Ui() {
+    public CliUi() {
         this.scanner = new Scanner(System.in);
     }
 

@@ -8,9 +8,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
+import gertrude.exceptions.SaveFileBadLineException;
 import gertrude.task.Task;
 
 public class Storage {
@@ -21,23 +20,32 @@ public class Storage {
     }
 
     public LoadResult loadTasksFromFile() {
+        assert dataFilePath != null && !dataFilePath.isEmpty() : "Missing data file path";
         File file = new File(dataFilePath);
         if (!file.exists()) {
             return new LoadResult(ReadTaskFileOutcome.NO_FILE_FOUND, new ArrayList<>());
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            List<Task> tasks = reader.lines()
-                    .map(Task::fromFileFormat)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+            List<Task> tasks = new ArrayList<>();
+            List<String> invalidLines = new ArrayList<>();
+
+            reader.lines().forEach(line -> {
+                try {
+                    Task task = Task.fromFileFormat(line);
+                    tasks.add(task);
+                } catch (SaveFileBadLineException e) {
+                    invalidLines.add(line);
+                }
+            });
             return new LoadResult(ReadTaskFileOutcome.SUCCESS, tasks);
         } catch (IOException e) {
-            return new LoadResult(ReadTaskFileOutcome.ERROR_READING_FILE, new ArrayList<>());
+            return new LoadResult(ReadTaskFileOutcome.FILE_UNREADABLE, new ArrayList<>());
         }
     }
 
     public void saveTasksToFile(List<Task> tasks) throws IOException {
+        assert dataFilePath != null && !dataFilePath.isEmpty() : "Missing data file path";
         File file = new File(dataFilePath);
         file.getParentFile().mkdirs(); // Ensure the parent directory exists
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
