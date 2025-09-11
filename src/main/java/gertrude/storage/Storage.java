@@ -19,6 +19,7 @@ public class Storage {
     }
 
     public LoadResult loadTasksFromFile() {
+        assert dataFilePath != null && !dataFilePath.isEmpty() : "Missing data file path";
         File file = new File(dataFilePath);
         if (!file.exists()) {
             return new LoadResult(ReadTaskFileOutcome.NO_FILE_FOUND, new ArrayList<>());
@@ -40,6 +41,7 @@ public class Storage {
     }
 
     public void saveTasksToFile(List<Task> tasks) throws IOException {
+        assert dataFilePath != null && !dataFilePath.isEmpty() : "Missing data file path";
         File file = new File(dataFilePath);
         file.getParentFile().mkdirs(); // Ensure the parent directory exists
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
