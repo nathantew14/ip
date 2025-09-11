@@ -2,7 +2,8 @@ package gertrude.gui;
 
 import gertrude.Gertrude;
 import gertrude.gui.components.DialogBox;
-
+import gertrude.interactions.GertrudeResponse;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -10,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  * Controller for the main GUI.
@@ -49,14 +51,26 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = gertrude.getResponse(input);
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage));
-        addGertrudeDialog(response);
+        GertrudeResponse response = gertrude.getResponse(input);
+        addUserDialog(input);
+        addGertrudeDialog(response.getMessage());
         userInput.clear();
+        if (response.isExit()) {
+            showGoodbyeAndExit();
+        }
     }
 
     private void addGertrudeDialog(String text) {
         dialogContainer.getChildren().add(DialogBox.getGertrudeDialog(text, gertrudeImage));
+    }
+
+    private void addUserDialog(String text) {
+        dialogContainer.getChildren().add(DialogBox.getUserDialog(text, userImage));
+    }
+
+    public void showGoodbyeAndExit() {
+        PauseTransition pause = new PauseTransition(Duration.seconds(2)); // Pause for 2 seconds
+        pause.setOnFinished(event -> System.exit(0)); // Exit after the pause
+        pause.play(); // Start the pause
     }
 }

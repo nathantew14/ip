@@ -13,6 +13,7 @@ import gertrude.task.Event;
 import gertrude.task.Task;
 import gertrude.task.CompletableTask;
 import gertrude.exceptions.InvalidInputException;
+import gertrude.interactions.GertrudeResponse;
 import gertrude.storage.LoadResult;
 import gertrude.storage.Storage;
 import gertrude.exceptions.InvalidDateFormatException;
@@ -94,15 +95,12 @@ public class Gertrude {
 
         while (true) {
             String input = cliUi.readCommand();
-            if (input.equalsIgnoreCase("bye")) {
+            GertrudeResponse response = getResponse(input);
+            cliUi.showResponse(response.getMessage());
+            if (response.isExit()) {
                 break;
             }
-            String response = "";
-            response = getResponse(input);
-            cliUi.showResponse(response);
         }
-
-        cliUi.showGoodbyeMessage();
         cliUi.close();
     }
 
@@ -112,7 +110,10 @@ public class Gertrude {
      * @param input The user input.
      * @return The response to the user input.
      */
-    public String getResponse(String input) {
+    public GertrudeResponse getResponse(String input) {
+        if (input.equalsIgnoreCase("bye")) {
+            return new GertrudeResponse("Goodbye! Have a great day!", true);
+        }
         CommandType commandType = CommandParser.parseCommand(input);
         String response;
         try {
@@ -149,15 +150,15 @@ public class Gertrude {
                 response = handleHelp();
             }
         } catch (InvalidInputException | IllegalArgumentException e) {
-            return e.getMessage();
+            return new GertrudeResponse(e.getMessage(), false);
         }
-        
+
         try {
             storage.saveTasksToFile(tasks.getAllTasks());
         } catch (IOException e) {
             response = "(Oops! I couldn't save your tasks: " + e.getMessage() + ")\n" + response;
         }
-        return response;
+        return new GertrudeResponse(response, false);
     }
 
     /**
