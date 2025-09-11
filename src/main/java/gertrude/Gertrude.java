@@ -98,18 +98,8 @@ public class Gertrude {
                 break;
             }
             String response = "";
-            try {
-                response = getResponse(input);
-            } catch (InvalidInputException | IllegalArgumentException e) {
-                response = e.getMessage();
-            }
-
+            response = getResponse(input);
             cliUi.showResponse(response);
-            try {
-                storage.saveTasksToFile(tasks.getAllTasks());
-            } catch (IOException e) {
-                cliUi.showResponse("Oops! I couldn't save your tasks, dear.");
-            }
         }
 
         cliUi.showGoodbyeMessage();
@@ -121,51 +111,53 @@ public class Gertrude {
      *
      * @param input The user input.
      * @return The response to the user input.
-     * @throws InvalidInputException    If the input is invalid.
-     * @throws IllegalArgumentException If an illegal argument is encountered.
      */
-    private String getResponse(String input) throws InvalidInputException, IllegalArgumentException {
+    public String getResponse(String input) {
         CommandType commandType = CommandParser.parseCommand(input);
-
-        switch (commandType) {
-        case ADD_TODO:
-            return handleAddTodo(input);
-
-        case LIST_TODOS:
-            return handleListTodos();
-
-        case COMPLETE_TODO:
-            return handleCompleteTodo(input);
-
-        case UNCOMPLETE_TODO:
-            return handleUncompleteTodo(input);
-
-        case REMOVE_TODO:
-            return handleRemoveTodo(input);
-
-        case FIND_TODO:
-            return handleFindTodo(input);
-
-        case HELP:
-            return handleHelp(); // Handle help command
-        default:
-            return handleHelp();
-        }
-    }
-
-    /**
-     * Processes user input and returns a response, handling exceptions.
-     *
-     * @param input The user input.
-     * @return The response to the user input, or an error message if an exception
-     *         occurs.
-     */
-    public String getErrorHandledResponse(String input) {
+        String response;
         try {
-            return getResponse(input);
+            switch (commandType) {
+            case ADD_TODO:
+                response = handleAddTodo(input);
+                break;
+
+            case LIST_TODOS:
+                response = handleListTodos();
+                break;
+
+            case COMPLETE_TODO:
+                response = handleCompleteTodo(input);
+                break;
+
+            case UNCOMPLETE_TODO:
+                response = handleUncompleteTodo(input);
+                break;
+
+            case REMOVE_TODO:
+                response = handleRemoveTodo(input);
+                break;
+
+            case FIND_TODO:
+                response = handleFindTodo(input);
+                break;
+
+            case HELP:
+                response = handleHelp(); // Handle help command
+                break;
+
+            default:
+                response = handleHelp();
+            }
         } catch (InvalidInputException | IllegalArgumentException e) {
             return e.getMessage();
         }
+        
+        try {
+            storage.saveTasksToFile(tasks.getAllTasks());
+        } catch (IOException e) {
+            response = "(Oops! I couldn't save your tasks: " + e.getMessage() + ")\n" + response;
+        }
+        return response;
     }
 
     /**

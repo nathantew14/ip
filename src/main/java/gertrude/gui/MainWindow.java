@@ -49,7 +49,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = gertrude.getErrorHandledResponse(input);
+        String response = gertrude.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage));
         addGertrudeDialog(response);
