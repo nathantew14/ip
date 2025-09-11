@@ -57,6 +57,8 @@ public class Gertrude {
     public String init() {
         String welcomeMessage;
 
+        assert DATA_FILE_PATH != null && !DATA_FILE_PATH.isEmpty() : "DATA_FILE_PATH missing";
+
         storage = new Storage(DATA_FILE_PATH);
         LoadResult loadResult = storage.loadTasksFromFile();
 
@@ -83,6 +85,8 @@ public class Gertrude {
      */
     private void run() {
         String welcomeMessage = init();
+
+        assert welcomeMessage != null && !welcomeMessage.isEmpty() : "Missing welcome message";
 
         ui = new Ui();
 

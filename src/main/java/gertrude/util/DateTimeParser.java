@@ -41,6 +41,8 @@ public class DateTimeParser {
      * @throws IllegalArgumentException If the input cannot be parsed.
      */
     public static LocalDateTime parse(String input) throws IllegalArgumentException {
+        assert STORAGE_FORMAT != null : "missing STORAGE_FORMAT";
+        assert DATE_TIME_PATTERNS != null && DATE_TIME_PATTERNS.length > 0 : "missing DATE_TIME_PATTERNS";
         try {
             return LocalDateTime.parse(input, STORAGE_FORMAT);
         } catch (DateTimeParseException ignored) {
