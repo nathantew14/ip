@@ -2,6 +2,8 @@ package gertrude.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TaskList {
     private final List<Task> tasks;
@@ -39,11 +41,9 @@ public class TaskList {
     }
 
     public String formatTasks() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tasks.size(); i++) {
-            sb.append(tasks.get(i).format(i)).append("\n");
-        }
-        return sb.toString().trim();
+        return IntStream.range(0, tasks.size())
+            .mapToObj(i -> tasks.get(i).format(i))
+            .collect(Collectors.joining("\n"));
     }
 
     public TaskList find(String keyword) {

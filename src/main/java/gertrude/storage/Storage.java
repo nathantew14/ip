@@ -26,23 +26,18 @@ public class Storage {
             return new LoadResult(ReadTaskFileOutcome.NO_FILE_FOUND, new ArrayList<>());
         }
 
-        List<Task> tasks = new ArrayList<>();
-        List<String> badLines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+            List<Task> tasks = new ArrayList<>();
+            List<String> invalidLines = new ArrayList<>();
+
+            reader.lines().forEach(line -> {
                 try {
                     Task task = Task.fromFileFormat(line);
-                    if (task != null) {
-                        tasks.add(task);
-                    }
+                    tasks.add(task);
                 } catch (SaveFileBadLineException e) {
-                    badLines.add(line);
+                    invalidLines.add(line);
                 }
-            }
-            if (!badLines.isEmpty()) {
-                return new LoadResult(ReadTaskFileOutcome.FILE_BAD_LINES, tasks, badLines);
-            }
+            });
             return new LoadResult(ReadTaskFileOutcome.SUCCESS, tasks);
         } catch (IOException e) {
             return new LoadResult(ReadTaskFileOutcome.FILE_UNREADABLE, new ArrayList<>());
