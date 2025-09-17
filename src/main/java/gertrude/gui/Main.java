@@ -16,6 +16,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            stage.setTitle("Getrude");
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             assert fxmlLoader != null : "FXML Loader cannot be null"; // Adding assertions to validate assumptions
             AnchorPane ap = fxmlLoader.load();
