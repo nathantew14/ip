@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 /**
- * Controller for the main GUI.
+ * Represents the main window of the GUI.
  */
 public class MainWindow extends AnchorPane {
     @FXML
@@ -36,9 +36,13 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Gertrude instance */
-    public void setGertrude(Gertrude g) {
-        gertrude = g;
+    /**
+     * Sets the Gertrude instance for the main window.
+     *
+     * @param gertrude the Gertrude instance
+     */
+    public void setGertrude(Gertrude gertrude) {
+        this.gertrude = gertrude;
         String welcomeMessage = gertrude.init();
         addGertrudeDialog(welcomeMessage);
     }
@@ -68,6 +72,9 @@ public class MainWindow extends AnchorPane {
         dialogContainer.getChildren().add(DialogBox.getUserDialog(text, userImage));
     }
 
+    /**
+     * Shows a goodbye message and exits the application after a short pause.
+     */
     public void showGoodbyeAndExit() {
         PauseTransition pause = new PauseTransition(Duration.seconds(2)); // Pause for 2 seconds
         pause.setOnFinished(event -> System.exit(0)); // Exit after the pause

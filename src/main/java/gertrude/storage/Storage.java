@@ -1,10 +1,10 @@
 package gertrude.storage;
 
-import java.io.File;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,9 @@ import java.util.List;
 import gertrude.exceptions.SaveFileBadLineException;
 import gertrude.task.Task;
 
+/**
+ * Handles the storage of tasks to and from a file.
+ */
 public class Storage {
     private final String dataFilePath;
 
@@ -19,6 +22,11 @@ public class Storage {
         this.dataFilePath = dataFilePath;
     }
 
+    /**
+     * Loads the task list from the file.
+     *
+     * @return the result of the load operation, including the loaded tasks
+     */
     public LoadResult loadTasksFromFile() {
         assert dataFilePath != null && !dataFilePath.isEmpty() : "Missing data file path";
         File file = new File(dataFilePath);
@@ -44,6 +52,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the task list to the file.
+     *
+     * @param tasks the task list to save
+     */
     public void saveTasksToFile(List<Task> tasks) throws IOException {
         assert dataFilePath != null && !dataFilePath.isEmpty() : "Missing data file path";
         File file = new File(dataFilePath);

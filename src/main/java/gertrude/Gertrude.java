@@ -1,29 +1,32 @@
 package gertrude;
 
-import java.io.*;
-import gertrude.util.DateTimeParser;
-import gertrude.util.CliUi;
+import java.io.IOException;
+
 import gertrude.command.CommandParser;
 import gertrude.command.CommandType;
 import gertrude.command.TagType;
-import gertrude.task.TaskList;
-import gertrude.task.Todo;
-import gertrude.task.Deadline;
-import gertrude.task.Event;
-import gertrude.task.Task;
-import gertrude.task.CompletableTask;
+import gertrude.exceptions.InvalidDateFormatException;
 import gertrude.exceptions.InvalidInputException;
 import gertrude.interactions.GertrudeResponse;
 import gertrude.storage.LoadResult;
 import gertrude.storage.Storage;
-import gertrude.exceptions.InvalidDateFormatException;
+import gertrude.task.CompletableTask;
+import gertrude.task.Deadline;
+import gertrude.task.Event;
+import gertrude.task.Task;
+import gertrude.task.TaskList;
+import gertrude.task.Todo;
+import gertrude.util.CliUi;
+import gertrude.util.DateTimeParser;
 
 /**
- * The main class for the Gertrude chatbot application. Handles user input, task
- * management, and file storage.
+ * Represents the main Gertrude application.
  */
 public class Gertrude {
-    private final String DATA_FILE_PATH;
+    /**
+     * The file path for storing data.
+     */
+    private static String dataFilePath;
     private TaskList tasks = new TaskList(); // TaskList is initialised as it is always used
     private Storage storage; // File path is not yet available to initialise storage
     private CliUi cliUi; // command line interface is not always used
@@ -34,7 +37,7 @@ public class Gertrude {
      * @param filePath The path to the data file for storing tasks.
      */
     public Gertrude(String filePath, String... args) {
-        DATA_FILE_PATH = filePath;
+        dataFilePath = filePath;
     }
 
     public Gertrude() {
@@ -50,12 +53,17 @@ public class Gertrude {
         new Gertrude().run();
     }
 
+    /**
+     * Initializes the application by loading tasks from the data file and returns a welcome message.
+     *
+     * @return The welcome message after initialization.
+     */
     public String init() {
         String welcomeMessage;
 
-        assert DATA_FILE_PATH != null && !DATA_FILE_PATH.isEmpty() : "DATA_FILE_PATH missing";
+        assert dataFilePath != null && !dataFilePath.isEmpty() : "dataFilePath missing";
 
-        storage = new Storage(DATA_FILE_PATH);
+        storage = new Storage(dataFilePath);
         LoadResult loadResult = storage.loadTasksFromFile();
 
         switch (loadResult.getStatus()) {
@@ -187,7 +195,8 @@ public class Gertrude {
         if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) || (startIndex != -1 && endIndex == -1)
                 || (endIndex != -1 && startIndex == -1)) {
             throw new InvalidInputException(
-                    "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
+                    "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end "
+                    + "for events.");
         }
 
         // Handle deadline task
@@ -295,7 +304,8 @@ public class Gertrude {
                 throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as completed.");
             }
 
-            ((CompletableTask) t).setCompleted();
+            CompletableTask completableTask = (CompletableTask) t;
+            completableTask.setCompleted();
             return "Marked task #" + (idx + 1) + " as completed.";
 
         } catch (NumberFormatException e) {
@@ -400,7 +410,7 @@ public class Gertrude {
                 .append("2. add:<description> /by <deadline>\n").append("   Add a deadline. Examples:\n")
                 .append("   add:finish iP /by 2/12/2019 1800\n").append("   add:finish iP /by 2/12/2019 6:00am\n")
                 .append("   add:finish iP /by 2019-12-02 18:00\n").append("   add:finish iP /by 2019-12-02\n")
-                .append("   Supported date formats:\n");
+                .append("   add:finish iP /by Tue\n").append("   Supported date formats:\n");
 
         for (String format : DateTimeParser.getAvailableFormats()) {
             helpMessage.append("   - ").append(format).append("\n");

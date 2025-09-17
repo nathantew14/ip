@@ -1,13 +1,13 @@
 package gertrude.task;
 
-import gertrude.util.DateTimeParser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import gertrude.exceptions.InvalidDateFormatException;
+import gertrude.util.DateTimeParser;
 
 /**
- * Represents a deadline task with a specific due date and time.
+ * Represents a task with a deadline in Gertrude.
  */
 public class Deadline extends CompletableTask {
     private LocalDateTime deadline;
@@ -50,6 +50,15 @@ public class Deadline extends CompletableTask {
      */
     public String getDeadlineAsString(String format) {
         return deadline.format(DateTimeFormatter.ofPattern(format));
+    }
+
+    /**
+     * Formats the deadline for display.
+     *
+     * @return the formatted deadline
+     */
+    public String formatDeadline() {
+        return getDeadlineAsString();
     }
 
     /**

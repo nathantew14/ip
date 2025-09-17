@@ -3,7 +3,7 @@ package gertrude.task;
 import gertrude.exceptions.SaveFileBadLineException;
 
 /**
- * Represents a generic task with a title and completion status.
+ * Represents a generic task in Gertrude.
  */
 public abstract class Task {
     protected String title;
@@ -110,5 +110,12 @@ public abstract class Task {
     @Override
     public String toString() {
         return getTitlePrefix() + title;
+    }
+
+    /**
+     * Marks the task as completed.
+     */
+    public void markAsCompleted() {
+        // ...existing code...
     }
 }

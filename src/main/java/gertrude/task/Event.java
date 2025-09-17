@@ -1,13 +1,13 @@
 package gertrude.task;
 
-import gertrude.util.DateTimeParser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import gertrude.exceptions.InvalidDateFormatException;
+import gertrude.util.DateTimeParser;
 
 /**
- * Represents an event task with a start and end time.
+ * Represents an event task in Gertrude.
  */
 public class Event extends CompletableTask {
     private LocalDateTime start;
@@ -114,5 +114,14 @@ public class Event extends CompletableTask {
     public String toFileFormat() {
         return super.toFileFormat() + " | " + start.format(DateTimeParser.STORAGE_FORMAT) + " | "
                 + end.format(DateTimeParser.STORAGE_FORMAT);
+    }
+
+    /**
+     * Formats the event details for display.
+     *
+     * @return the formatted event details
+     */
+    public String formatEvent() {
+        return toString();
     }
 }

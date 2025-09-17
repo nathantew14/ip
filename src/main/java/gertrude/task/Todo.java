@@ -1,7 +1,7 @@
 package gertrude.task;
 
 /**
- * Represents a simple todo task.
+ * Represents a to-do task in Gertrude.
  */
 public class Todo extends CompletableTask {
 
@@ -22,5 +22,15 @@ public class Todo extends CompletableTask {
     @Override
     public String getTaskType() {
         return "T";
+    }
+
+    /**
+     * Returns the string representation of the to-do task.
+     *
+     * @return the string representation
+     */
+    @Override
+    public String toString() {
+        return "[T]" + super.toString();
     }
 }

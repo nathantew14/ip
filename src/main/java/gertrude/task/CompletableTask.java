@@ -1,7 +1,7 @@
 package gertrude.task;
 
 /**
- * Represents a task that can be marked as completed or not completed.
+ * Represents a completable task in Gertrude.
  */
 public class CompletableTask extends Task {
     private boolean isCompleted = false;
@@ -82,5 +82,14 @@ public class CompletableTask extends Task {
     @Override
     public String toString() {
         return String.format("[%s] %s %s", getTaskType(), isCompleted ? "[X]" : "[ ]", title);
+    }
+
+    /**
+     * Marks the task as completed and logs the completion.
+     */
+    @Override
+    public void markAsCompleted() {
+        setCompleted();
+        // Add logging logic here if needed
     }
 }
