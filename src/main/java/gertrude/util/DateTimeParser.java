@@ -28,7 +28,7 @@ public class DateTimeParser {
     private static final String[] DATE_PATTERNS = {
             "d/M/yyyy", // Example: 2/12/2019
             "yyyy-MM-dd", // Example: 2019-12-02
-            "E", // Example: Tuesday
+            "E", // Example: Tuesday. Will be handled by dayOfWeek parser instead of the generic Date parser
             "e" // Example: Tue
     };
 
@@ -63,26 +63,57 @@ public class DateTimeParser {
         LocalTime time = null;
 
         for (String part : parts) {
-            try {
-                // Check if the part is a day of the week
-                DateTimeFormatter fmt = DateTimeFormatter.ofPattern("E", Locale.ENGLISH);
-                DayOfWeek dayOfWeek = DayOfWeek.from(fmt.parse(part));
-                LocalDate today = LocalDate.now();
-                date = today.with(TemporalAdjusters.nextOrSame(dayOfWeek));
-            } catch (DateTimeParseException ignored) {
-                // Not a day of the week, continue
-            }
+            part = part.trim().toLowerCase(Locale.ENGLISH);
+            part = part.substring(0, 1).toUpperCase() + part.substring(1);
+            logger.log(Level.INFO, String.format("---------Parsing part: %s---------", part));
 
-            if (date == null) {
-                // Try parsing as a date
-                for (String pattern : DATE_PATTERNS) {
-                    try {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-                        date = LocalDate.parse(part, formatter);
-                        break;
-                    } catch (DateTimeParseException ignored) {
-                        // Try the next pattern
+            // Handle special words like "today" and "tomorrow" before dayOfWeek parsing
+            if (part.equalsIgnoreCase("today")) {
+                date = LocalDate.now();
+                logger.log(Level.INFO, "Special word 'today' parsed");
+                continue; // Skip dayOfWeek parsing
+            } else if (part.equalsIgnoreCase("tomorrow")) {
+                date = LocalDate.now().plusDays(1);
+                logger.log(Level.INFO, "Special word 'tomorrow' parsed");
+                continue; // Skip dayOfWeek parsing
+            } else {
+                DayOfWeek dayOfWeek = null;
+                try {
+                    // Check if the part is a day of the week using multiple patterns
+                    String[] dayPatterns = { "E", "EEEE" };
+                    for (String pattern : dayPatterns) {
+                        try {
+                            DateTimeFormatter fmt = DateTimeFormatter.ofPattern(pattern, Locale.ENGLISH);
+                            dayOfWeek = DayOfWeek.from(fmt.parse(part));
+                            break; // Exit loop if parsing succeeds
+                        } catch (DateTimeParseException ignored) {
+                            logger.log(Level.INFO,
+                                    String.format("Failed to parse dayOfWeek with pattern '%s'.", pattern));
+                        }
                     }
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, "Unable to parse day of week.", e);
+                }
+                if (dayOfWeek != null) {
+                    LocalDate today = LocalDate.now();
+                    date = today.with(TemporalAdjusters.nextOrSame(dayOfWeek));
+                    logger.log(Level.INFO, "Day of week parsed");
+                }
+
+                if (date == null) {
+                    // Try parsing as a date
+                    for (String pattern : DATE_PATTERNS) {
+                        try {
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+                            date = LocalDate.parse(part, formatter);
+                            logger.log(Level.INFO, "Date parsed");
+                            break;
+                        } catch (DateTimeParseException ignored) {
+                            // Try the next pattern
+                        }
+                    }
+                    if (date == null)
+                        logger.log(Level.INFO, "No date parsed, try time.");
                 }
             }
 
@@ -92,11 +123,14 @@ public class DateTimeParser {
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
                         time = LocalTime.parse(part, formatter);
+                        logger.log(Level.INFO, "Time parsed");
                         break;
                     } catch (DateTimeParseException ignored) {
                         // Try the next pattern
                     }
                 }
+                if (time == null)
+                    logger.log(Level.INFO, "No time parsed, how?");
             }
         }
 
@@ -113,13 +147,6 @@ public class DateTimeParser {
             if (time == null) {
                 time = LocalTime.now();
             }
-
-            LocalDateTime dateTime = date.atTime(time);
-
-            // If the time has already passed today, use the next day
-            if (dateTime.isBefore(LocalDateTime.now())) {
-                dateTime = dateTime.plusDays(1);
-            }
         }
 
         // Default to 8 AM if no time is provided
@@ -128,6 +155,11 @@ public class DateTimeParser {
         }
 
         LocalDateTime dateTime = date.atTime(time);
+
+        // If the time has already passed today, use the next day
+        if (dateTime.isBefore(LocalDateTime.now())) {
+            dateTime = dateTime.plusDays(1);
+        }
 
         return dateTime;
     }
