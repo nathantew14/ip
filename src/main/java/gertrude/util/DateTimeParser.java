@@ -114,25 +114,37 @@ public class DateTimeParser {
         return dateTime;
     }
 
-    public static LocalDate parseSpecialWords(String part) {
-        if (part.equalsIgnoreCase("today")) {
+    /**
+     * Parses special words like "today" or "tomorrow" into a LocalDate object.
+     *
+     * @param inputString The word to parse.
+     * @return The parsed LocalDate object, or null if the word is not recognized.
+     */
+    public static LocalDate parseSpecialWords(String inputString) {
+        if (inputString.equalsIgnoreCase("today")) {
             logger.log(Level.INFO, "Special word 'today' parsed");
             return LocalDate.now();
-        } else if (part.equalsIgnoreCase("tomorrow")) {
+        } else if (inputString.equalsIgnoreCase("tomorrow")) {
             logger.log(Level.INFO, "Special word 'tomorrow' parsed");
             return LocalDate.now().plusDays(1);
         }
         return null;
     }
 
-    public static LocalDate parseDayOfWeek(String part) {
+    /**
+     * Parses a day of the week into a LocalDate object.
+     *
+     * @param inputString The day of the week to parse.
+     * @return The parsed LocalDate object, or null if the input is not a valid day of the week.
+     */
+    public static LocalDate parseDayOfWeek(String inputString) {
         DayOfWeek dayOfWeek = null;
         try {
             String[] dayPatterns = { "E", "EEEE" };
             for (String pattern : dayPatterns) {
                 try {
                     DateTimeFormatter fmt = DateTimeFormatter.ofPattern(pattern, Locale.ENGLISH);
-                    dayOfWeek = DayOfWeek.from(fmt.parse(part));
+                    dayOfWeek = DayOfWeek.from(fmt.parse(inputString));
                     break;
                 } catch (DateTimeParseException ignored) {
                     logger.log(Level.INFO, String.format("Failed to parse dayOfWeek with pattern '%s'.", pattern));
@@ -152,14 +164,14 @@ public class DateTimeParser {
     /**
      * Parses a date string into a LocalDate object.
      *
-     * @param dateString the date string to parse
-     * @return the parsed LocalDate object
+     * @param inputString The date string to parse.
+     * @return The parsed LocalDate object, or null if the input cannot be parsed.
      */
-    public static LocalDate parseDate(String dateString) {
+    public static LocalDate parseDate(String inputString) {
         for (String pattern : DATE_PATTERNS) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-                LocalDate date = LocalDate.parse(dateString, formatter);
+                LocalDate date = LocalDate.parse(inputString, formatter);
                 logger.log(Level.INFO, "Date parsed");
                 return date;
             } catch (DateTimeParseException ignored) {
@@ -170,11 +182,17 @@ public class DateTimeParser {
         return null;
     }
 
-    public static LocalTime parseTime(String part) {
+    /**
+     * Parses a time string into a LocalTime object.
+     *
+     * @param inputString The time string to parse.
+     * @return The parsed LocalTime object, or null if the input cannot be parsed.
+     */
+    public static LocalTime parseTime(String inputString) {
         for (String pattern : TIME_PATTERNS) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-                LocalTime time = LocalTime.parse(part, formatter);
+                LocalTime time = LocalTime.parse(inputString, formatter);
                 logger.log(Level.INFO, "Time parsed");
                 return time;
             } catch (DateTimeParseException ignored) {
@@ -199,10 +217,10 @@ public class DateTimeParser {
     /**
      * Parses a date and time string into a LocalDateTime object.
      *
-     * @param dateTimeString the date and time string to parse
-     * @return the parsed LocalDateTime object
+     * @param inputString The date and time string to parse.
+     * @return The parsed LocalDateTime object.
      */
-    public LocalDateTime parseDateTime(String dateTimeString) {
-        return parse(dateTimeString);
+    public LocalDateTime parseDateTime(String inputString) {
+        return parse(inputString);
     }
 }

@@ -30,15 +30,20 @@ public class LoadResult {
     }
 
     /**
-     * Gets the list of loaded tasks.
+     * Returns the list of errors encountered during loading.
+     *
+     * @return the list of errors
+     */
+    public List<String> getBadLines() {
+        return badLines;
+    }
+
+    /**
+     * Returns the list of successfully loaded tasks.
      *
      * @return the list of tasks
      */
     public List<Task> getTasks() {
         return tasks;
-    }
-
-    public List<String> getBadLines() {
-        return badLines;
     }
 }
