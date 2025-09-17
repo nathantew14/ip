@@ -67,7 +67,6 @@ public class DateTimeParser {
                 LocalDate today = LocalDate.now();
                 date = today.with(TemporalAdjusters.nextOrSame(dayOfWeek));
             } catch (DateTimeParseException ignored) {
-                // System.out.println("Failed to parse part: \"" + part + "\" as date with E pattern");
                 // Not a day of the week, continue
             }
 
@@ -79,7 +78,6 @@ public class DateTimeParser {
                         date = LocalDate.parse(part, formatter);
                         break;
                     } catch (DateTimeParseException ignored) {
-                        // System.out.println("Failed to parse part: \"" + part + "\" as date with pattern: " + pattern);
                         // Try the next pattern
                     }
                 }
@@ -93,7 +91,6 @@ public class DateTimeParser {
                         time = LocalTime.parse(part, formatter);
                         break;
                     } catch (DateTimeParseException ignored) {
-                        // System.out.println("Failed to parse part: \"" + part + "\" as time with pattern: " + pattern);
                         // Try the next pattern
                     }
                 }
