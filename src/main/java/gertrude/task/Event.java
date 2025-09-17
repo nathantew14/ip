@@ -1,10 +1,10 @@
 package gertrude.task;
 
-import gertrude.util.DateTimeParser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import gertrude.exceptions.InvalidDateFormatException;
+import gertrude.util.DateTimeParser;
 
 /**
  * Represents an event task with a start and end time.

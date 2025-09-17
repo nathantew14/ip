@@ -14,6 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.Node;
 
+/**
+ * Represents a dialog box in the GUI.
+ */
 public class DialogBox extends HBox {
     @FXML
     private Label dialog;
@@ -35,10 +38,9 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Flips the dialog box such that the ImageView is on the left and text on the
-     * right.
+     * Flips the dialog box such that the image is on the left.
      */
-    private void flip() {
+    public void flip() {
         this.setAlignment(Pos.TOP_LEFT);
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
         FXCollections.reverse(tmp);

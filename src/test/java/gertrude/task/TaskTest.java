@@ -1,8 +1,7 @@
 package gertrude.task;
 
-import org.junit.jupiter.api.Test;
-
 import gertrude.exceptions.SaveFileBadLineException;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 

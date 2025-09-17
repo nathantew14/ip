@@ -1,10 +1,10 @@
 package gertrude.task;
 
-import gertrude.util.DateTimeParser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import gertrude.exceptions.InvalidDateFormatException;
+import gertrude.util.DateTimeParser;
 
 /**
  * Represents a deadline task with a specific due date and time.

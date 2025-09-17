@@ -10,6 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * The main entry point for the GUI application.
+ */
 public class Main extends Application {
     private Gertrude gertrude = new Gertrude();
 

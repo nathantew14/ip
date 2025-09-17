@@ -8,8 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
@@ -26,18 +26,18 @@ public class DateTimeParser {
     // Flexible input patterns
     // Date-only patterns
     private static final String[] DATE_PATTERNS = {
-            "d/M/yyyy", // Example: 2/12/2019
-            "yyyy-MM-dd", // Example: 2019-12-02
-            "E", // Example: Tuesday. Will be handled by dayOfWeek parser instead of the generic Date parser
-            "e" // Example: Tue
+        "d/M/yyyy", // Example: 2/12/2019
+        "yyyy-MM-dd", // Example: 2019-12-02
+        "E", // Example: Tuesday. Will be handled by dayOfWeek parser instead of the generic Date parser
+        "e" // Example: Tue
     };
 
     // Time-only patterns
     private static final String[] TIME_PATTERNS = {
-            "HHmm", // Example: 1800
-            "HH:mm", // Example: 18:00
-            "h:mma", // Example: 6:00am
-            "ha" // Example: 6am
+        "HHmm", // Example: 1800
+        "HH:mm", // Example: 18:00
+        "h:mma", // Example: 6:00am
+        "ha" // Example: 6am
     };
 
     /**
@@ -149,11 +149,17 @@ public class DateTimeParser {
         return null;
     }
 
-    public static LocalDate parseDate(String part) {
+    /**
+     * Parses a date string into a LocalDate object.
+     *
+     * @param dateString the date string to parse
+     * @return the parsed LocalDate object
+     */
+    public static LocalDate parseDate(String dateString) {
         for (String pattern : DATE_PATTERNS) {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-                LocalDate date = LocalDate.parse(part, formatter);
+                LocalDate date = LocalDate.parse(dateString, formatter);
                 logger.log(Level.INFO, "Date parsed");
                 return date;
             } catch (DateTimeParseException ignored) {

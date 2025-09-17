@@ -1,8 +1,7 @@
 package gertrude;
 
-import java.io.*;
-import gertrude.util.DateTimeParser;
 import gertrude.util.CliUi;
+import gertrude.util.DateTimeParser;
 import gertrude.command.CommandParser;
 import gertrude.command.CommandType;
 import gertrude.command.TagType;
@@ -17,13 +16,16 @@ import gertrude.interactions.GertrudeResponse;
 import gertrude.storage.LoadResult;
 import gertrude.storage.Storage;
 import gertrude.exceptions.InvalidDateFormatException;
+import java.io.IOException;
 
 /**
- * The main class for the Gertrude chatbot application. Handles user input, task
- * management, and file storage.
+ * Represents the main Gertrude application.
  */
 public class Gertrude {
-    private final String DATA_FILE_PATH;
+    /**
+     * The file path for storing data.
+     */
+    private static String dataFilePath;
     private TaskList tasks = new TaskList(); // TaskList is initialised as it is always used
     private Storage storage; // File path is not yet available to initialise storage
     private CliUi cliUi; // command line interface is not always used
@@ -34,7 +36,7 @@ public class Gertrude {
      * @param filePath The path to the data file for storing tasks.
      */
     public Gertrude(String filePath, String... args) {
-        DATA_FILE_PATH = filePath;
+        dataFilePath = filePath;
     }
 
     public Gertrude() {
@@ -53,9 +55,9 @@ public class Gertrude {
     public String init() {
         String welcomeMessage;
 
-        assert DATA_FILE_PATH != null && !DATA_FILE_PATH.isEmpty() : "DATA_FILE_PATH missing";
+        assert dataFilePath != null && !dataFilePath.isEmpty() : "dataFilePath missing";
 
-        storage = new Storage(DATA_FILE_PATH);
+        storage = new Storage(dataFilePath);
         LoadResult loadResult = storage.loadTasksFromFile();
 
         switch (loadResult.getStatus()) {

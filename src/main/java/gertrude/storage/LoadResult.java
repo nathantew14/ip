@@ -5,6 +5,9 @@ import gertrude.task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the result of loading tasks from a file.
+ */
 public class LoadResult {
     private final ReadTaskFileOutcome status;
     private final List<Task> tasks;
@@ -26,6 +29,11 @@ public class LoadResult {
         return status;
     }
 
+    /**
+     * Gets the list of loaded tasks.
+     *
+     * @return the list of tasks
+     */
     public List<Task> getTasks() {
         return tasks;
     }
