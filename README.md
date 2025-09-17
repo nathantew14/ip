@@ -1,32 +1,25 @@
-# Gertrude project template
+# Gertrude task tracker
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Gertrude_. Given below are instructions on how to use it.
+This is a project template for a greenfield Java project. It's named to be reminiscent of a grandmotherly figure, _Gertrude_. Given below are instructions on how to use it.
 
-## Setting up in Intellij
+## Setting up in VSCode
+I can't actually get Gradle for VSCode to work, so...  
+Prerequisites: JDK 17.
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
-
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Gertrude.java` file, right-click it, and choose `Run Gertrude.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+1. Run `./gradlew run` for the GUI project.
+2. Alternatively, navigate to `src/main/java/gertrude/gertrude.java and click the Run button in VSCode to launch the CLI version`
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
+## Usage
+List of commands can be invoked with "help". It will also be shown whenever an unrecognised command is input.
+
+## Things to note
+Data is stored under `/data/gertrude.txt`, and is shared across the CLI and GUI app.
+
 ## Commands
-`./text-ui-test/runtest.sh`
-`./gradlew checkstyleMain checkstyleTest`
-`./gradlew build`
+`./text-ui-test/runtest.sh`  
+`./gradlew checkstyleMain checkstyleTest`  
+`./gradlew build`  
+`./gradlew run`  
 `java -jar ./build/libs/gertrude.jar`
