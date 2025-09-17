@@ -72,6 +72,9 @@ public class MainWindow extends AnchorPane {
         dialogContainer.getChildren().add(DialogBox.getUserDialog(text, userImage));
     }
 
+    /**
+     * Shows a goodbye message and exits the application after a short pause.
+     */
     public void showGoodbyeAndExit() {
         PauseTransition pause = new PauseTransition(Duration.seconds(2)); // Pause for 2 seconds
         pause.setOnFinished(event -> System.exit(0)); // Exit after the pause

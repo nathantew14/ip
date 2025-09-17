@@ -1,22 +1,23 @@
 package gertrude;
 
-import gertrude.util.CliUi;
-import gertrude.util.DateTimeParser;
+import java.io.IOException;
+
 import gertrude.command.CommandParser;
 import gertrude.command.CommandType;
 import gertrude.command.TagType;
-import gertrude.task.TaskList;
-import gertrude.task.Todo;
-import gertrude.task.Deadline;
-import gertrude.task.Event;
-import gertrude.task.Task;
-import gertrude.task.CompletableTask;
+import gertrude.exceptions.InvalidDateFormatException;
 import gertrude.exceptions.InvalidInputException;
 import gertrude.interactions.GertrudeResponse;
 import gertrude.storage.LoadResult;
 import gertrude.storage.Storage;
-import gertrude.exceptions.InvalidDateFormatException;
-import java.io.IOException;
+import gertrude.task.CompletableTask;
+import gertrude.task.Deadline;
+import gertrude.task.Event;
+import gertrude.task.Task;
+import gertrude.task.TaskList;
+import gertrude.task.Todo;
+import gertrude.util.CliUi;
+import gertrude.util.DateTimeParser;
 
 /**
  * Represents the main Gertrude application.
@@ -52,6 +53,11 @@ public class Gertrude {
         new Gertrude().run();
     }
 
+    /**
+     * Initializes the application by loading tasks from the data file and returns a welcome message.
+     *
+     * @return The welcome message after initialization.
+     */
     public String init() {
         String welcomeMessage;
 
@@ -189,7 +195,8 @@ public class Gertrude {
         if ((byIndex != -1 && (startIndex != -1 || endIndex != -1)) || (startIndex != -1 && endIndex == -1)
                 || (endIndex != -1 && startIndex == -1)) {
             throw new InvalidInputException(
-                    "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end for events.");
+                    "Invalid combination of tags. Please use only /by for deadlines, or both /start and /end "
+                    + "for events.");
         }
 
         // Handle deadline task
@@ -297,7 +304,8 @@ public class Gertrude {
                 throw new InvalidInputException("Task #" + (idx + 1) + " cannot be marked as completed.");
             }
 
-            ((CompletableTask) t).setCompleted();
+            CompletableTask completableTask = (CompletableTask) t;
+            completableTask.setCompleted();
             return "Marked task #" + (idx + 1) + " as completed.";
 
         } catch (NumberFormatException e) {
