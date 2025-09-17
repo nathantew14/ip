@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
- * Utility class for parsing and formatting date and time strings.
+ * Represents a parser for date and time in Gertrude.
  */
 public class DateTimeParser {
     // Formatter for file storage
@@ -194,5 +194,15 @@ public class DateTimeParser {
         Stream<String> datePatternsStream = Stream.of(DATE_PATTERNS);
         Stream<String> timePatternsStream = Stream.of(TIME_PATTERNS);
         return Stream.concat(datePatternsStream, timePatternsStream).toArray(String[]::new);
+    }
+
+    /**
+     * Parses a date and time string into a LocalDateTime object.
+     *
+     * @param dateTimeString the date and time string to parse
+     * @return the parsed LocalDateTime object
+     */
+    public LocalDateTime parseDateTime(String dateTimeString) {
+        return parse(dateTimeString);
     }
 }

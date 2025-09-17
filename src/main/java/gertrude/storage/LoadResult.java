@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the result of loading tasks from a file.
+ * Represents a result of loading tasks from storage.
  */
 public class LoadResult {
     private final ReadTaskFileOutcome status;
