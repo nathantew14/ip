@@ -8,6 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
@@ -18,6 +20,7 @@ public class DateTimeParser {
     public static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     // Formatter for display
     public static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, h:mma");
+    private static final Logger logger = Logger.getLogger("DateTimeParserLogger");
 
     // https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
     // Flexible input patterns
@@ -103,7 +106,7 @@ public class DateTimeParser {
 
         // Default to current date if no date is provided
         if (date == null) {
-            System.out.println("No date provided, defaulting to today.");
+            logger.log(Level.INFO, "No date provided, defaulting to today.");
             date = LocalDate.now();
 
             // Default to current time if no time is provided
