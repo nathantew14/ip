@@ -400,7 +400,7 @@ public class Gertrude {
                 .append("2. add:<description> /by <deadline>\n").append("   Add a deadline. Examples:\n")
                 .append("   add:finish iP /by 2/12/2019 1800\n").append("   add:finish iP /by 2/12/2019 6:00am\n")
                 .append("   add:finish iP /by 2019-12-02 18:00\n").append("   add:finish iP /by 2019-12-02\n")
-                .append("   Supported date formats:\n");
+                .append("   add:finish iP /by Tue\n").append("   Supported date formats:\n");
 
         for (String format : DateTimeParser.getAvailableFormats()) {
             helpMessage.append("   - ").append(format).append("\n");
