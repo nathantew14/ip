@@ -127,6 +127,14 @@ A: Copy the `data/gertrude.txt` file to the same location on the new computer wh
 I can't actually get Gradle for VSCode to work, so...  
 Prerequisites: JDK 17.
 
+Specific versions for MacOS:
+```
+>> ip % java --version 
+openjdk 17.0.14 2025-01-21 LTS
+OpenJDK Runtime Environment Zulu17.56+15-CA (build 17.0.14+7-LTS)
+OpenJDK 64-Bit Server VM Zulu17.56+15-CA (build 17.0.14+7-LTS, mixed mode, sharing)
+```
+
 1. Run `./gradlew run` for the GUI project.
 2. Alternatively, navigate to `src/main/java/gertrude/gertrude.java and click the Run button in VSCode to launch the CLI version`
 
