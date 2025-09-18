@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
     minHeight="-Infinity" minWidth="-Infinity"
-    prefHeight="600.0" prefWidth="700.0"
+    prefHeight="600.0" prefWidth="550.0"
     xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="gertrude.gui.MainWindow">
@@ -29,24 +29,17 @@
             AnchorPane.rightAnchor="0.0"
             AnchorPane.bottomAnchor="0.0" />
         <ScrollPane fx:id="scrollPane"
-            style="-fx-border-color: red; -fx-background-color: lightgray;"
             hbarPolicy="NEVER"
             hvalue="1.0"
             vvalue="1.0"
+            fitToWidth="true"
             AnchorPane.topAnchor="0.0"
             AnchorPane.leftAnchor="0.0"
             AnchorPane.rightAnchor="0.0"
             AnchorPane.bottomAnchor="41.0"
         >
             <content>
-                <VBox fx:id="dialogContainer"
-                    style="-fx-border-color: green; -fx-background-color: darkgray;"
-                    maxWidth="-Infinity"
-                    VBox.vgrow="ALWAYS"
-                    AnchorPane.topAnchor="0.0"
-                    AnchorPane.leftAnchor="0.0"
-                    AnchorPane.rightAnchor="0.0"
-                    AnchorPane.bottomAnchor="41.0" />
+                <VBox fx:id="dialogContainer" />
             </content>
         </ScrollPane>
     </children>

@@ -8,9 +8,6 @@
 <!-- setting prefWidth here can change the width of everything else, but i can't seem to make it grow on its own -->
 <!-- I give up it's literally impossible -->
 <fx:root alignment="TOP_RIGHT"
-    maxWidth="-Infinity"
-    prefWidth="700.0"
-    HBox.hgrow="ALWAYS"
     type="javafx.scene.layout.HBox"
     xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1">
