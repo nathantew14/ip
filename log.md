@@ -24,3 +24,7 @@ Only thing that changed the width was hard-setting a `minWidth` for `VBox` or `D
 
 UPDATE: SETTING `maxWidth="-Infinity"`IN THE VBox WAS THE PROBLEM WTF AOISHDFOAIL;KSHDFN ;OAHSDFLNIHAS
 why does the AnchorPane have that and why does it work...
+
+# Credit
+## Images
+https://cdn.vectorstock.com/i/1000v/09/25/smiling-cartoon-grandma-portrait-flat-design-vector-47760925.jpg
