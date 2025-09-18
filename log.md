@@ -21,3 +21,6 @@ AnchorPane.rightAnchor="0.0"
 AnchorPane.bottomAnchor="41.0"
 ```
 Only thing that changed the width was hard-setting a `minWidth` for `VBox` or `DialogBox`.
+
+UPDATE: SETTING `maxWidth="-Infinity"`IN THE VBox WAS THE PROBLEM WTF AOISHDFOAIL;KSHDFN ;OAHSDFLNIHAS
+why does the AnchorPane have that and why does it work...
