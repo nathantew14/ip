@@ -405,8 +405,9 @@ public class Gertrude {
      * @return The help message.
      */
     private String handleHelp() {
-        StringBuilder helpMessage = new StringBuilder("Here are the available commands:\n")
-                .append("1. add:<description>\n").append("   Add a todo. Example:\n").append("   add:find nemo\n")
+        StringBuilder helpMessage = new StringBuilder("Sorry, I didn't quite get that. \n\n")
+                .append("Here are the available commands:\n").append("1. add:<description>\n")
+                .append("   Add a todo. Example:\n").append("   add:find nemo\n")
                 .append("2. add:<description> /by <deadline>\n").append("   Add a deadline. Examples:\n")
                 .append("   add:finish iP /by 2/12/2019 1800\n").append("   add:finish iP /by 2/12/2019 6:00am\n")
                 .append("   add:finish iP /by 2019-12-02 18:00\n").append("   add:finish iP /by 2019-12-02\n")

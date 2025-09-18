@@ -9,6 +9,7 @@
 <!-- I give up it's literally impossible -->
 <fx:root alignment="TOP_RIGHT"
     type="javafx.scene.layout.HBox"
+    spacing="5.0"
     xmlns="http://javafx.com/javafx/17"
     xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -17,6 +18,6 @@
             preserveRatio="true" />
     </children>
     <padding>
-        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
     </padding>
 </fx:root>
