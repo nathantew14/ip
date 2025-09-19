@@ -137,6 +137,7 @@ OpenJDK 64-Bit Server VM Zulu17.56+15-CA (build 17.0.14+7-LTS, mixed mode, shari
 
 1. Run `./gradlew run` for the GUI project.
 2. Alternatively, navigate to `src/main/java/gertrude/gertrude.java and click the Run button in VSCode to launch the CLI version`
+3. To get VSCode to recognise the Java project, you might have to explicitly set the path to java in [.vscode/settings.json](.vscode/settings.json).
 
 **Warning:** Keep the `src/main/java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
