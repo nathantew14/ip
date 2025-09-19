@@ -41,7 +41,7 @@ public abstract class Task {
      * @return The title prefix.
      */
     public String getTitlePrefix() {
-        return String.format("[%s] ", getTaskType());
+        return String.format("[%s]", getTaskType());
     }
 
     /**
@@ -110,12 +110,5 @@ public abstract class Task {
     @Override
     public String toString() {
         return getTitlePrefix() + title;
-    }
-
-    /**
-     * Marks the task as completed.
-     */
-    public void markAsCompleted() {
-        // ...existing code...
     }
 }
