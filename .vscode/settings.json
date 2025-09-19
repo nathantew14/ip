@@ -1,8 +1,19 @@
 {
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "java.configuration.updateBuildConfiguration": "interactive",
-    "java.format.settings.url": ".vscode/java-formatter.xml",
-    "java.checkstyle.configuration": "${workspaceFolder}/config/checkstyle/checkstyle.xml",
-    "java.checkstyle.properties": {
-        "config_loc": "${workspaceFolder}/config/checkstyle"
-    }  
+    "java.jdt.ls.java.home": "/Users/nathan/.sdkman/candidates/java/current",
+    "java.configuration.runtimes": [
+        {
+          "name": "JavaSE-17",
+          "path": "/Users/nathan/.sdkman/candidates/java/current",
+          "default": true
+        }
+    ]
 }
